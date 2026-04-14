@@ -899,6 +899,13 @@ body {
             <div class="lang-native">Kem Cho!</div>
           </div>
         </button>
+        <button class="lang-btn" data-lang="sa">
+          <div class="flag">&#128591;</div>
+          <div class="lang-info">
+            <div class="lang-name">Sanskrit</div>
+            <div class="lang-native">Namah!</div>
+          </div>
+        </button>
         <button class="lang-btn" data-lang="de">
           <div class="flag">&#127465;&#127466;</div>
           <div class="lang-info">
@@ -1216,6 +1223,28 @@ const WORD_LISTS = {
       targets: ['AAKAASH','BHAGWAN','CHAMELI','DHARATI','KAHAANI','MACHALI','PARVATH','VIKAASH','BAADSHA','CHAANDI','JHILMIL','KHUSHBU','MOSAMBI','SHIKSHA','TASVEER','TUFAANI','DHAMAKA','PANCHAM','RANVEER','AANDOLI','GULMOHR','GAJANAN','NAGMANI','YOGAASAN','SAMUDAY','UDGHOSH','LAVANDA','RISHIKA','UPVAASH'],
       valid: null
     }
+  },
+  sa: {
+    3: {
+      targets: ['RAM','DEV','SUR','JAL','VAK','RAS','TAN','MAN','DAN','VAN','GAN','SAT','TAP','DAM','NAM','PAD','MAD','JAP','RUP','GUN','DAS','BHU','DIV','NAV','SAR','YAM','KAL','MAT','RAN','PAR','NAR','GAJ','RAJ','VAR','SAJ','TAJ','BAL','PAL','JAY','MAY','LAY','DAY','RAY','SAP','GAR','VAS','DIN','BIN','JIV','SUM'],
+      valid: null
+    },
+    4: {
+      targets: ['DEVA','GURU','YOGA','RASA','MALA','SURA','VEDA','AGNI','ATMA','MAYA','PUJA','SEVA','DAAN','GYAN','KAVI','NADI','RUPA','VANI','YUGA','TAPA','GUNA','KALA','LOKA','NAVA','PADA','RAJA','SOMA','VAYU','DAYA','JALA','KAMA','LATA','MANU','NARA','PALA','RANI','SETU','TANU','VANA','YAMA','BALA','DHIR','GATI','HIMA','JIVA','MATI','NITI','PURA','RITU','VIRA'],
+      valid: null
+    },
+    5: {
+      targets: ['KARMA','BHUMI','SURYA','MITRA','PRANA','VIDYA','KRIYA','MUKTI','AMRIT','SHIVA','VAANI','DRONA','ARTHA','NETRA','HASTA','STUTI','PUNYA','TEJAS','TAPAS','VEDIC','RATNA','PADMA','SWAMI','DHANU','VARTA','YAJNA','TULSI','VAKYA','GAURI','NITYA','SATYA','SHANI','JWALA','DURGA','DHARA','BINDU','KALPA','MUDRA','NABHA','RASAM','SIKHA','KARYA','LAKSH','NAKUL','PAUSH','RATRI','SADHU','YUDHA','BHAVA','GRAHA'],
+      valid: null
+    },
+    6: {
+      targets: ['DHARMA','MANTRA','MOKSHA','TANTRA','SHAKTI','YANTRA','CHAKRA','BHAKTI','SURYAM','BRAHMA','GARUDA','VISHNU','MATSYA','VARUNA','VASANT','PRANAM','KAVITA','SUNDAR','SHASTR','ANANDA','ISHWAR','ARCHNA','STOTRA','STOTAM','SHLOKA','SANGAM','PAVANA','UTTARA','SAHAJA','NAMAHA','SPARSH','SWARAJ','SIDDHI','SANJAY','DEEPAK','TULASI','KAPILA','KUMARA','NAGARA','MANASA','JATAKA','RAKSHA','SAMSTH','KRISHI','LAKSHA','GANESH','VARSHA','SAMUDH','CHARAN','DARSHA'],
+      valid: null
+    },
+    7: {
+      targets: ['SAMSARA','NIRVANA','BRAHMAN','ACHARYA','SARASWT','ARCHANA','DHARANI','GANESHA','HANUMAN','JYOTISH','KAILASH','LAKSHMI','MAHATMA','NAMASTH','PANCHAM','PRAKRIT','SADHANA','VALMIKI','VIVEKAM','YAJNESH','CHAITYA','DEVAKII','GURUKUL','KAPILAM','MAHABHR','NAVARAS','PATANJI','BHAGWAN','SHANKRA','TRIKALA','UPASANA','VIBHUTI','YOGARAJ','CHAITRA','MANDALA','KALASHA','RANGOLI','NAKSHAT','PUSHKAR','VAISHYA'],
+      valid: null
+    }
   }
 };
 
@@ -1228,7 +1257,8 @@ const KB_LAYOUTS = {
   pt: [['Q','W','E','R','T','Y','U','I','O','P'],['A','S','D','F','G','H','J','K','L'],['ENTER','Z','X','C','V','B','N','M','BACK']],
   it: [['Q','W','E','R','T','Y','U','I','O','P'],['A','S','D','F','G','H','J','K','L'],['ENTER','Z','X','C','V','B','N','M','BACK']],
   hi: [['Q','W','E','R','T','Y','U','I','O','P'],['A','S','D','F','G','H','J','K','L'],['ENTER','Z','X','C','V','B','N','M','BACK']],
-  gu: [['Q','W','E','R','T','Y','U','I','O','P'],['A','S','D','F','G','H','J','K','L'],['ENTER','Z','X','C','V','B','N','M','BACK']]
+  gu: [['Q','W','E','R','T','Y','U','I','O','P'],['A','S','D','F','G','H','J','K','L'],['ENTER','Z','X','C','V','B','N','M','BACK']],
+  sa: [['Q','W','E','R','T','Y','U','I','O','P'],['A','S','D','F','G','H','J','K','L'],['ENTER','Z','X','C','V','B','N','M','BACK']]
 };
 
 const LANG_NAMES = {
@@ -1239,7 +1269,8 @@ const LANG_NAMES = {
   pt: { name: 'Portugu\u00eas', flag: '\u{1F1E7}\u{1F1F7}' },
   it: { name: 'Italiano', flag: '\u{1F1EE}\u{1F1F9}' },
   hi: { name: 'Hindi', flag: '\u{1F1EE}\u{1F1F3}' },
-  gu: { name: 'Gujarati', flag: '\u{1F1EE}\u{1F1F3}' }
+  gu: { name: 'Gujarati', flag: '\u{1F1EE}\u{1F1F3}' },
+  sa: { name: 'Sanskrit', flag: '\u{1F64F}' }
 };
 
 // ==================== GAME STATE ====================
