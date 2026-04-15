@@ -21,6 +21,10 @@
 
 <!-- Google AdSense -->
 <meta name="google-adsense-account" content="ca-pub-7655879237041224">
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta name="robots" content="index, follow">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7655879237041224" crossorigin="anonymous"></script>
 
 <!-- JSON-LD Structured Data -->
@@ -1193,8 +1197,24 @@ body.dark .stores-bar a { color: #8ab4f8; }
   <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7655879237041224" data-ad-slot="BOTTOM_SLOT_ID" data-ad-format="auto" data-full-width-responsive="true"></ins>
 </div>
 
+<!-- TRANSLATE WIDGET -->
+<div id="kwTranslate" style="max-width:540px;margin:6px auto;display:none;justify-content:flex-end;padding:0 8px;">
+  <div id="google_translate_element"></div>
+</div>
+
+<!-- EMAIL SUBSCRIBER -->
+<div id="kwSubscribe" style="max-width:540px;margin:10px auto;padding:16px;background:linear-gradient(135deg,var(--blue),var(--blue-dark));border-radius:14px;text-align:center;color:white;display:none;">
+  <p style="margin:0 0 8px;font-size:14px;font-weight:800;">Love KiddieWordle? Get weekly word challenges!</p>
+  <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST" style="display:flex;gap:6px;max-width:360px;margin:0 auto;flex-wrap:wrap;justify-content:center;">
+    <input type="email" name="email" placeholder="parent@email.com" required style="flex:1;min-width:180px;padding:8px 12px;border:none;border-radius:10px;font-size:13px;font-family:inherit;">
+    <input type="hidden" name="_subject" value="New subscriber — KiddieWordle">
+    <button type="submit" style="padding:8px 16px;border:none;border-radius:10px;background:#fff;color:var(--blue);font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;">Subscribe</button>
+  </form>
+</div>
+
 <div class="footer" id="gameFooter" style="display:none;">
   KiddieWordle &mdash; A <a href="https://kiddiesketch.com" target="_blank">KiddieSketch</a> Game | <a href="https://kiddiego.com" target="_blank">Shop KiddieGo</a> | <a href="https://kiddiepets.com" target="_blank">KiddiePets</a>
+  <br><span style="font-size:9px;opacity:0.5;">Property of <a href="https://legacybridgealliancegroup.com" target="_blank" style="color:inherit;">Legacy Bridge Alliance Group</a>. All rights reserved.</span>
 </div>
 
 <script>
@@ -1493,6 +1513,8 @@ function showGameUI() {
   document.getElementById('boardContainer').style.display = '';
   document.getElementById('keyboard').style.display = '';
   document.getElementById('adBottom').style.display = '';
+  document.getElementById('kwTranslate').style.display = 'flex';
+  document.getElementById('kwSubscribe').style.display = '';
   document.getElementById('gameFooter').style.display = '';
 
   // Update info bar
@@ -1510,6 +1532,8 @@ function hideGameUI() {
   document.getElementById('boardContainer').style.display = 'none';
   document.getElementById('keyboard').style.display = 'none';
   document.getElementById('adBottom').style.display = 'none';
+  document.getElementById('kwTranslate').style.display = 'none';
+  document.getElementById('kwSubscribe').style.display = 'none';
   document.getElementById('gameFooter').style.display = 'none';
 }
 
@@ -2098,5 +2122,7 @@ if ('serviceWorker' in navigator) {
 try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
 try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
 </script>
+<script>function googleTranslateElementInit(){new google.translate.TranslateElement({pageLanguage:'en',autoDisplay:false,layout:google.translate.TranslateElement.InlineLayout.SIMPLE},'google_translate_element');}</script>
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
