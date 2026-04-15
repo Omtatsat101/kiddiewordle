@@ -13,6 +13,33 @@
 <meta name="twitter:title" content="KiddieWordle — Free Kids Word Game">
 <meta name="twitter:description" content="Wordle for kids! Choose word length, pick a language, and play. Free, safe, and fun.">
 <link rel="canonical" href="https://kiddiewordle.com">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#2196F3">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="KiddieWordle">
+
+<!-- Google AdSense -->
+<meta name="google-adsense-account" content="ca-pub-7655879237041224">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7655879237041224" crossorigin="anonymous"></script>
+
+<!-- JSON-LD Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "KiddieWordle",
+  "url": "https://kiddiewordle.com",
+  "description": "Free word game for kids ages 3-12. Choose word length (3-7 letters), play in English, Hindi, Gujarati, Spanish, French, German, Portuguese, Italian, or Sanskrit.",
+  "applicationCategory": "GameApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "audience": { "@type": "EducationalAudience", "educationalRole": "student", "suggestedMinAge": 3, "suggestedMaxAge": 12 },
+  "inLanguage": ["en", "es", "fr", "de", "pt", "it", "hi", "gu", "sa"],
+  "author": { "@type": "Organization", "name": "KiddieSketch", "url": "https://kiddiesketch.com" }
+}
+</script>
+
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -825,6 +852,104 @@ body {
 @media (max-width: 340px) {
   :root { --tile-size: 40px; --key-height: 40px; }
 }
+
+/* DARK MODE */
+body.dark {
+  --bg: #1a1a2e;
+  --white: #2a2a3e;
+  --gray-light: #3a3a4e;
+  background: var(--bg);
+  color: #e0e0e0;
+}
+body.dark .setup-screen { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); }
+body.dark .setup-card { background: #2a2a3e; box-shadow: 0 12px 48px rgba(0,0,0,0.4); }
+body.dark .setup-card h1 { background: linear-gradient(135deg, #64B5F6, #FFB74D); -webkit-background-clip: text; background-clip: text; }
+body.dark .setup-card .subtitle { color: #aaa; }
+body.dark .setup-section h3 { color: #bbb; }
+body.dark .length-btn { background: #333; border-color: #555; }
+body.dark .length-btn .num { color: #ddd; }
+body.dark .length-btn .label { color: #aaa; }
+body.dark .length-btn.selected { background: #1a3a5c; border-color: var(--blue); }
+body.dark .lang-btn { background: #333; border-color: #555; }
+body.dark .lang-btn .lang-name { color: #ddd; }
+body.dark .lang-btn .lang-native { color: #aaa; }
+body.dark .lang-btn.selected { background: #3a2a1a; border-color: var(--orange); }
+body.dark .icon-btn { background: #333; border-color: #555; color: #8ab4f8; }
+body.dark .icon-btn:hover { background: #8ab4f8; color: #1a1a2e; }
+body.dark .tile { background: #333; border-color: #555; color: #eee; }
+body.dark .tile.filled { border-color: #888; }
+body.dark .key { background: #444; color: #eee; }
+body.dark .game-info .badge { background: #333; color: #ccc; }
+body.dark .modal { background: #2a2a3e; color: #e0e0e0; }
+body.dark .modal h2 { color: #8ab4f8; }
+body.dark .footer { color: #666; }
+body.dark .toast { background: #333; color: #eee; }
+body.dark .setup-badge { background: #333; color: #aaa; }
+body.dark .stores-bar { background: #2a2a3e; border-color: #3a3a4e; }
+body.dark .stores-bar a { color: #8ab4f8; }
+
+/* STORES BAR */
+.stores-bar {
+  width: 100%;
+  max-width: 540px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 8px 12px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  margin: 6px auto;
+  font-size: 12px;
+  font-weight: 700;
+  flex-wrap: wrap;
+}
+
+.stores-bar .divider { color: var(--gray-light); }
+
+.stores-bar a {
+  color: var(--blue);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: color 0.2s;
+}
+
+.stores-bar a:hover { color: var(--blue-dark); text-decoration: underline; }
+
+.stores-bar .sponsor-label {
+  color: #999;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* AD SLOTS */
+.ad-slot {
+  width: 100%;
+  max-width: 540px;
+  margin: 6px auto;
+  text-align: center;
+  min-height: 50px;
+  overflow: hidden;
+}
+
+.ad-slot ins { display: block; }
+
+/* DARK MODE TOGGLE */
+.dark-toggle {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 100;
+}
+
+/* TILE PERF */
+.tile { will-change: transform; }
+.confetti-piece { will-change: transform, opacity; }
 </style>
 </head>
 <body>
@@ -955,6 +1080,23 @@ body {
   <div class="badge" id="infoLength"></div>
 </div>
 
+<!-- STORES & SPONSORS BAR -->
+<div class="stores-bar" id="storesBar" style="display:none;">
+  <span class="sponsor-label">Our Family</span>
+  <a href="https://kiddiesketch.com" target="_blank" rel="noopener">&#9997; KiddieSketch</a>
+  <span class="divider">|</span>
+  <a href="https://kiddiego.com" target="_blank" rel="noopener">&#127757; KiddieGo</a>
+  <span class="divider">|</span>
+  <a href="https://kiddiepets.com" target="_blank" rel="noopener">&#128062; KiddiePets</a>
+  <span class="divider">|</span>
+  <a href="https://kiddiedaily.com" target="_blank" rel="noopener">&#128240; KiddieDaily</a>
+</div>
+
+<!-- AD SLOT: TOP BANNER -->
+<div class="ad-slot" id="adTop" style="display:none;">
+  <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7655879237041224" data-ad-slot="TOP_SLOT_ID" data-ad-format="auto" data-full-width-responsive="true"></ins>
+</div>
+
 <!-- GAME BOARD -->
 <div class="board-container" id="boardContainer" style="display:none;">
   <div class="board" id="board"></div>
@@ -977,6 +1119,11 @@ body {
     <div class="turtle-leg bl"></div>
     <div class="turtle-leg br"></div>
   </div>
+</div>
+
+<!-- DARK MODE TOGGLE -->
+<div class="dark-toggle">
+  <button class="icon-btn" id="darkBtn" aria-label="Toggle dark mode" title="Dark mode">&#9790;</button>
 </div>
 
 <!-- SOUND TOGGLE -->
@@ -1041,8 +1188,13 @@ body {
   </div>
 </div>
 
+<!-- AD SLOT: BOTTOM BANNER -->
+<div class="ad-slot" id="adBottom" style="display:none;">
+  <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7655879237041224" data-ad-slot="BOTTOM_SLOT_ID" data-ad-format="auto" data-full-width-responsive="true"></ins>
+</div>
+
 <div class="footer" id="gameFooter" style="display:none;">
-  KiddieWordle &mdash; A KiddieGo Game | <a href="https://kiddiego.com" target="_blank">kiddiego.com</a>
+  KiddieWordle &mdash; A <a href="https://kiddiesketch.com" target="_blank">KiddieSketch</a> Game | <a href="https://kiddiego.com" target="_blank">Shop KiddieGo</a> | <a href="https://kiddiepets.com" target="_blank">KiddiePets</a>
 </div>
 
 <script>
@@ -1336,8 +1488,11 @@ function initSetup() {
 function showGameUI() {
   document.getElementById('gameHeader').style.display = '';
   document.getElementById('gameInfo').style.display = '';
+  document.getElementById('storesBar').style.display = '';
+  document.getElementById('adTop').style.display = '';
   document.getElementById('boardContainer').style.display = '';
   document.getElementById('keyboard').style.display = '';
+  document.getElementById('adBottom').style.display = '';
   document.getElementById('gameFooter').style.display = '';
 
   // Update info bar
@@ -1350,8 +1505,11 @@ function showGameUI() {
 function hideGameUI() {
   document.getElementById('gameHeader').style.display = 'none';
   document.getElementById('gameInfo').style.display = 'none';
+  document.getElementById('storesBar').style.display = 'none';
+  document.getElementById('adTop').style.display = 'none';
   document.getElementById('boardContainer').style.display = 'none';
   document.getElementById('keyboard').style.display = 'none';
+  document.getElementById('adBottom').style.display = 'none';
   document.getElementById('gameFooter').style.display = 'none';
 }
 
@@ -1674,7 +1832,9 @@ function launchConfetti() {
     piece.style.animationDelay = (Math.random() * 0.8) + 's';
     container.appendChild(piece);
   }
-  setTimeout(() => container.innerHTML = '', 4000);
+  setTimeout(() => {
+    while (container.firstChild) container.removeChild(container.firstChild);
+  }, 4000);
 }
 
 // ==================== TOAST ====================
@@ -1913,6 +2073,30 @@ try {
 if (!localStorage.getItem('kiddiewordle_visited')) {
   localStorage.setItem('kiddiewordle_visited', 'true');
 }
+
+// ==================== DARK MODE ====================
+const darkBtn = document.getElementById('darkBtn');
+if (localStorage.getItem('kiddiewordle_dark') === 'true') {
+  document.body.classList.add('dark');
+  darkBtn.textContent = '\u2600';
+}
+darkBtn.addEventListener('click', () => {
+  document.body.classList.toggle('dark');
+  const isDark = document.body.classList.contains('dark');
+  darkBtn.textContent = isDark ? '\u2600' : '\u263E';
+  localStorage.setItem('kiddiewordle_dark', isDark);
+  // Update theme-color meta for mobile
+  document.querySelector('meta[name="theme-color"]').content = isDark ? '#1a1a2e' : '#2196F3';
+});
+
+// ==================== PWA ====================
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+
+// ==================== ADS ====================
+try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
+try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
 </script>
 </body>
 </html>
