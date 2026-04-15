@@ -34,12 +34,12 @@
   "@type": "WebApplication",
   "name": "KiddieWordle",
   "url": "https://kiddiewordle.com",
-  "description": "Free word game for kids ages 3-12. Choose word length (3-7 letters), play in English, Hindi, Gujarati, Spanish, French, German, Portuguese, Italian, or Sanskrit.",
+  "description": "Free word game for kids ages 3-12. Choose word length (3-7 letters), play in 17 languages including English, Spanish, French, Hindi, Arabic, Hebrew, Swahili, Japanese, Korean, Turkish, Russian, and Chinese.",
   "applicationCategory": "GameApplication",
   "operatingSystem": "Any",
   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
   "audience": { "@type": "EducationalAudience", "educationalRole": "student", "suggestedMinAge": 3, "suggestedMaxAge": 12 },
-  "inLanguage": ["en", "es", "fr", "de", "pt", "it", "hi", "gu", "sa"],
+  "inLanguage": ["en", "es", "fr", "de", "pt", "it", "hi", "gu", "sa", "ar", "he", "sw", "ja", "ko", "tr", "ru", "zh"],
   "author": { "@type": "Organization", "name": "KiddieSketch", "url": "https://kiddiesketch.com" }
 }
 </script>
@@ -1417,6 +1417,182 @@ const WORD_LISTS = {
       targets: ['SAMSARA','NIRVANA','BRAHMAN','ACHARYA','SARASWT','ARCHANA','DHARANI','GANESHA','HANUMAN','JYOTISH','KAILASH','LAKSHMI','MAHATMA','NAMASTH','PANCHAM','PRAKRIT','SADHANA','VALMIKI','VIVEKAM','YAJNESH','CHAITYA','DEVAKII','GURUKUL','KAPILAM','MAHABHR','NAVARAS','PATANJI','BHAGWAN','SHANKRA','TRIKALA','UPASANA','VIBHUTI','YOGARAJ','CHAITRA','MANDALA','KALASHA','RANGOLI','NAKSHAT','PUSHKAR','VAISHYA'],
       valid: null
     }
+  },
+  ar: {
+    3: {
+      targets: ['NUR','DAR','UMM','ABU','YAD','AYN','RAB','RUH','DIB','NAR','BAB','JAD','HAQ','WAD','FUL','MAA','JAM','HUB','ARD','TAJ','ZAR','RIM','NAS','KUL','JAR','TAL','MAS','HIL','BAT','DUA','TAB','FAN','HAM','RAS','AQL','TIN','SAM','QIT','LAW','BAS','SAR','KAF','QAL','UKH','QAM','JAW','NIS','HAR','RAK','AWN','SIR'],
+      valid: null
+    },
+    4: {
+      targets: ['BAYT','SHMS','NAHR','WARD','ZAHR','LAYL','SABR','SALM','HILM','HUBB','WAFA','AMAL','NASR','TIIN','ZAIT','LABN','KHBZ','SAMK','DIIK','BAQR','JAML','ASAD','YAWM','ARDD','MALH','BAHR','SAHA','SHAM','HAWA','JILD','MATR','QABL','BAAD','HAYY','SIHR','FIKR','TAYR','NAML','SAMN','QADR','KITB','AASR','FAJR','SIJN'],
+      valid: null
+    },
+    5: {
+      targets: ['SHAMS','QAMAR','BAQAR','JAMAL','KITAB','SABAH','MASAA','SALAH','JANNA','HAYAT','SAHRA','NUJUM','ZAHAB','MATAR','TUFAH','MAHAL','KABIR','SAGIR','JAMIL','AHMAR','ABYAD','ASWAD','BANAT','AWLAD','SAFAR','TIFEL','SHAAB','HISAN','BATAL','FALAH','HILAL','FARIS','HAFLA','MALEK','NAHLA','SALAM','IKLIL','QARIB','AQRAB','DALIL','UMMAT','AKHDR','WARID','MASJD'],
+      valid: null
+    },
+    6: {
+      targets: ['MADINA','USTADH','SHAJAR','TAWILA','KURISI','DARAJA','HADIKA','HAYWAN','ARNABI','SAKINA','SAFINA','KALIMA','BAHARI','JAWHAR','GHARIB','LAYMUN','BURTUQ','TUFFAH','FARASH','JAMILA','MUSAID','HAFIDH','SINDUK','MARKAZ','SHABAB','HASANA','SAAIDA','NASHAR','FALAHI','SHARIA','MADRAS','BANAFS','TABIIA','MUSIKA','SHARIK','FAYRUZ','WUSULI','QALUUB'],
+      valid: null
+    },
+    7: {
+      targets: ['SADIIKI','USTADHA','MAKTABA','TAALUIM','JAMEELA','MANZILI','MADRASA','MUALLIM','FUNDUQI','MASHGUL','TARIIQI','BURTUQN','MUSTAFA','MUSAFIR','MASHWIY','KHARITA','FALSAFA','MAKTUBI','HAQIIQA','TAAWUUN','BANAANA','TABIIBI','GHABAAT','QAMARIY','ASDIIQY','MUHANDZ','AMILAAT','SHIIJRA','BATLAAN','HAYAWAT'],
+      valid: null
+    }
+  },
+  he: {
+    3: {
+      targets: ['YAM','GAN','KOL','YOM','BAT','BEN','ABA','IMA','LEV','SUS','NER','GAL','TAL','GAG','OHR','RAV','SAV','TAN','RAM','DAG','GEV','PAR','TIK','PEH','LAV','YAD','KEN','BAR','GUF','TOV','SAL','ARI','RUH','MAS','PAZ','KAV','RAN','MAL','LUZ','HAS','NEV','ALF','DOR','MOS','NAS','HOM','MAH','NIT','ZAV','AFI'],
+      valid: null
+    },
+    4: {
+      targets: ['ABBA','IMMA','YESH','SHIR','SHEM','SHAM','EGEL','OHEL','ADON','DEEG','HETZ','HOPH','KELB','LEEV','MALH','NAAV','OZEN','PEHL','RAHV','SAKL','TSAV','YAIN','ZAHV','BAYY','GAHV','HALV','KHOL','MAHZ','NAML','SAKK','TAVV','TOOV','YUDD','GIML','NETZ','SAHK','TSVI','GAHG','YAHD','KELV'],
+      valid: null
+    },
+    5: {
+      targets: ['BOKER','TAMAR','MAYIM','SEFER','PERAH','LAILA','AHAVA','GVINA','ARETZ','IVRIT','YEREK','ADAMA','SIPUR','YELED','SHANA','HARBE','YAFEH','GADOL','KATAN','MELEH','RUAHH','DVASH','TAPUZ','SHLEG','BARUK','AGALA','BARAK','EREVV','KELEV','TZOME','OHREL','KESHT','GIMEL','RAGIL','OLAMI','YERAK','OTZAR','PETEK'],
+      valid: null
+    },
+    6: {
+      targets: ['TALMID','PRAKHM','IVRITA','BRACHA','KODESH','MORIAH','GESHEM','KOCHAV','TAPUAH','ANAVIM','SHEKET','MESIBA','TANAKH','HANUKA','KIPPUR','SUKKOT','GALILA','MASADA','MINHAG','SIMLAH','KADOSH','RAKDAN','SAFSAL','KINORI','GANENI','MENORA','KHALAV','SHOFAR','TSOFIM','MIDBAR','RAMZOR','SHIRON','YELADM','MISHPK','SIPURI','NAHARI','BATULH','MAYIMI'],
+      valid: null
+    },
+    7: {
+      targets: ['YELADIM','SIPURIM','MISHPAH','TALMIDA','SHABBAT','LESHANA','KOCHVIM','PERAKHM','TIKVATH','BRASHOT','HAGGADA','MATZOTH','YELADOT','MENORAH','SHIURIM','NESHAMA','TARBUIT','HEVRATI','MOLADOT','YEHUDAH','BINYAMN','TFILLIN','KHAMSIN','NEVIIMM','TSADIIK','KISAOOT','SHABTON','MASHIAK','GESHARM','BERESHT'],
+      valid: null
+    }
+  },
+  sw: {
+    3: {
+      targets: ['MJI','MTO','TAU','JUA','MKE','USO','NJA','DUA','UJI','LEO','SAA','TAI','MNO','NNE','MBI','WAT','UPO','KAA','HAO','KWA','KUU','MWA','NYU','PUA','UMA','UFO','UFI','NJI','DOA','MKA','YAI','FUA','PEA','KWE','UWE','NJO','MKU','YAO','UZI','AWA','NJE','MOT','MUA','MWI','OKA','WOT','TAA','MBO','NNI','MWE'],
+      valid: null
+    },
+    4: {
+      targets: ['MAJI','BABA','MAMA','KUKU','MIMI','WEWE','SISI','DADA','KAKA','EMBE','TATU','TANO','SITA','NANE','MBWA','PAKA','KAZI','NJIA','NCHI','WALI','SAMK','JINA','SIKU','WIKI','MAWE','ROHO','HERI','AMNI','NGUO','MEZA','KITI','JOTO','MVUA','HAKI','AFYA','IMBA','WEMA','MALI','UGAL','MWAK','MWEZ','UFUK'],
+      valid: null
+    },
+    5: {
+      targets: ['MTOTO','NYOTA','NDIZI','SIMBA','BWANA','CHEZA','HAFLA','IMARA','JICHO','KUBWA','LUGHA','NDEGE','NGUVU','NJIWA','PWANI','SANAA','SHULE','TUNDA','WIMBO','ASILI','FURHI','KIBAO','KITAB','MOANA','MWEZI','RAFIK','STORI','ENEZA','GUNDI','DARSA','NUURI','PAMOJ','USHIR','VITAB','YATIM','ZAMNI','NANSI','ASKRI','MAHLI'],
+      valid: null
+    },
+    6: {
+      targets: ['ASKARI','BARIDI','CHAKUL','DARASA','ELIMUU','FURAHA','HABARI','KARAMU','KIBOKO','KIPAJI','KISIMA','KIJANA','MAISHA','NAOMBA','NYUMBA','RAFIKI','SAFARI','SAMAKI','SHAURI','TANURI','TAFITI','UJUMBE','VITABU','WAZIRI','UPENDO','ZAWADI','MALIMU','MAMAKE','MWANZO','NDOANO','PILIKA','JAMANI','TWANGA','SIKUUU','SWAHIL','UZALND','ZIARAN'],
+      valid: null
+    },
+    7: {
+      targets: ['BUSTANI','CHAKULA','MWALIMU','SHUGHUL','KISWAHL','KUFUNZA','JAMHURI','WAKULMA','UTAMADU','KIJUMBA','MSICHAN','MPENDWA','VITUMBU','MANDARI','BARABRA','MKAHAWA','TARAJIA','UCHAGUZ','HABARII','KATIIKA','DARUBNI','ELEKEZI','MAPISHI','SABABUU','MASOMOO'],
+      valid: null
+    }
+  },
+  ja: {
+    3: {
+      targets: ['UMI','AME','INU','EKI','OKA','UTA','ANI','IMO','UME','ASA','AKI','IRO','ISU','INE','ANE','OTO','AKA','AWA','UDE','URA','ISE','IKI','OKU','ANA','AGE','IWA','AHI','ARE','ASE','ATO','EBI','EMA','ORI','ICE','IDO','UKE','AYU','ASO','ERI','AJI','OBI','ENI','UNI','OKE','UWA','OKI','AWE','OSU','IKA','KAI'],
+      valid: null
+    },
+    4: {
+      targets: ['NEKO','SORA','HANA','MIZU','KAZE','YAMA','KAMI','ASHI','TORI','SAKU','MORI','ISHI','KAWA','KOME','MOMO','YUKI','NAMI','KUSA','MADO','KUMO','TERA','HARU','FUNE','SAKE','SUNA','MURA','HONE','USHI','BARA','SATO','YUME','KUMA','RIKU','KANI','DESU','KODO','HITO','MUNE','AKAI','AOKI','TOFU','RISU','KAMO','WANI','HOSI','SHIR'],
+      valid: null
+    },
+    5: {
+      targets: ['HIKRI','KODMO','GAKKO','SENSI','GENKI','MIKAN','IKIRU','SUIKA','UNAGI','TAIKO','HIKAR','ONGAK','TOMOD','OHAYO','OISHI','KAWAI','SUGOI','KIRIN','USAGI','TANUK','PANDA','DANGO','UMAMI','SUSHI','BENTO','RAMEN','MOCHI','NASHI','MATSU','FUTON','NIHON','MANGA','ANIME','MAHOU','CHIZU','SAKUR','NINJN','YUMEI','TANKI'],
+      valid: null
+    },
+    6: {
+      targets: ['SAKURA','HIKARI','KODOMO','GAKKOU','SENSEI','MUSUME','KAZOKU','ONGAKU','OHAYOU','KAWAII','ICHIGO','TAMAGO','KARATE','KIMONO','OISHII','KITSUN','ORIGAM','MEGANE','MIDORI','ARIGAT','NEMURI','NAGISA','SUZUME','TENSHI','MOMIJI','HOTARU','NATANE','GURUMI','TAKUYA','NARUTO','SUDOKU','MATSUI','GENKAI','NINJAA','MANGAS','SAMURI','AYUMII','SHINJI'],
+      valid: null
+    },
+    7: {
+      targets: ['ORIGAMI','TSUNAMI','KARAOKE','ARIGATO','IKEBANA','KENDAMA','OKAASAN','OTOOSAN','MATSURI','SAMURAI','TERIYAK','TAIYAKI','TEMPURA','ONIGIRI','SASHIMI','HIRAGNA','KAKIGRI','TANABAT','HANABII','GENKIII','OBENTOS','NINJUTU','KIMONOS','WASABII','FURIAGN'],
+      valid: null
+    }
+  },
+  ko: {
+    3: {
+      targets: ['NAM','BAP','MUL','HAK','GUK','DAL','BAM','BIT','BUL','GOT','GIM','NAL','NUN','SON','MAL','MOM','SAN','BOM','SIL','BAE','GOM','NAI','JIP','KOT','GAM','KUL','MAT','SAL','SAM','MOK','BAK','JUL','MUN','SOK','BAN','HAL','HIM','NUK','JAM','PUL','SIM','DOL','GIL','ABI','OMI','KOP','HAE','DOM','PPO','PIL'],
+      valid: null
+    },
+    4: {
+      targets: ['HANA','NAMU','BADA','GOGI','SSAL','NABI','GAJA','KONG','BEOL','SORI','MISO','NARA','BAEK','DONG','YEOL','DOSI','BORI','GAJI','MONG','GEUM','DURI','GGUM','GGOT','DALK','PADO','GAWI','SEOM','DARI','SAJA','GANG','KIMS','HARU','JEUK','SAEM','PUNG','BOJA','GUKK','MUJI','SEUL','BYOL','NOBI'],
+      valid: null
+    },
+    5: {
+      targets: ['HANOL','BARAM','NORAE','GUKSU','KIMCH','GEOUL','MAEUL','BYEOL','SAGWA','TTUKK','GAENR','JANGM','NARBI','YEORM','GYEOL','SONGK','NORAN','GONWN','YEPPU','GONBU','SARAM','CHEON','MANAM','DONMU','SUPAR','ONDOL','BIBIM','SONPY','MUNHW','TAEGK','HAKKY','JEONG','BAEUL'],
+      valid: null
+    },
+    6: {
+      targets: ['SARANG','KIMCHI','CHINGU','GAJOKK','HANGUK','HAKKYO','DONGML','NORAEB','TTEOKB','ONDOLI','HAEMUL','MUNHWA','GAMSAH','HANBOK','ANNYEO','MANDUK','MAKGOL','TTUKBE','GEONBA','CHAPSL','SONMUL','YUHAEN','JEONHW','JEONBK','JAJANG','SAGWAI','PYEONH','NAMSAN','BOSEOT','GWAMOK'],
+      valid: null
+    },
+    7: {
+      targets: ['ANNYEOG','CHINGUY','GAMSAHM','BIBIMBP','BULGOGI','GIMBAPP','TTEOKBK','JAJANGM','MAKGEOL','GALBIIM','SAMGYUP','JAPCHAE','MANDUGK','NAENGMY','SONGPYN','DONGHWA','EOMEONI','ABEOJII','HALMONI','HALABUJ','SEONMUL','YAKSOKK','GYEOULL','HAMKKEE','CHEONGU','GONGJUN','KIMBAPP','BAMEIII'],
+      valid: null
+    }
+  },
+  tr: {
+    3: {
+      targets: ['ANA','ATA','GUL','GOZ','GUN','AYI','DIS','KUS','BAL','ARI','CAN','YUZ','SAC','KOL','ODA','TAT','BAS','BUZ','DUT','FIR','HIS','KOY','NEM','SIR','TAS','YAZ','KAR','CAM','ACI','GOK','DAG','BEL','FIL','YIL','SES','KAP','KOK','TUZ','DEN','YAP','DIL','CEV','COR','EEL','CEM','EEK','DER','CIL'],
+      valid: null
+    },
+    4: {
+      targets: ['ANNE','BABA','KEDI','GECE','OKUL','OYUN','KAPI','GEZI','DERE','DOST','GEMI','ISIK','KALE','MASA','SARI','YENI','KUZU','AGAC','HAVA','FARE','BERE','INCI','MAVI','ALTI','OZAN','YURT','GIDA','ARMA','BALK','EKMK','ORDU','SAAT','TREN','VALI','YAPI','DERZ','KIRK','SIVI','KARS','NENE'],
+      valid: null
+    },
+    5: {
+      targets: ['BAHCE','BALIK','BULUT','CEVIZ','CICEK','DUNYA','EKMEK','HAYAT','KITAP','MASAL','PAZAR','SAHIL','TATLI','YEMEK','ZAMAN','BEYAZ','CINAR','DEMIR','GUZEL','HAMUR','INCIR','KAHVE','LIMON','MANAV','NINNI','ORMAN','PAMUK','SALCA','TABLO','VATAN','BAHAR','GOLGE','HELVA','GUNES','RENGI','OKUMA','NISAN','KALBI','AKILL','AYGIR'],
+      valid: null
+    },
+    6: {
+      targets: ['BALKON','ECZANE','FUTBOL','GOZLEM','MUTFAK','PILAVI','SIMITI','ZEYTIN','KEBABI','CAMLIK','ECZACI','GOZLUK','HEYKEL','KALECI','ANKARA','MISAFR','OGRENC','RESIMI','TATILI','YAVRUU','AILESI','BAHCEI','DENIZL','HASRET','IRMAKI','KAHVLT','LOKANT','NOHUTL','PAPATR','SAADET','UCKURT','VARLKI','KORDON','SEPETI'],
+      valid: null
+    },
+    7: {
+      targets: ['BALIKCI','DONDURM','EKMEKCI','FUTBOLC','GOZLEME','HELVACI','KAHVALT','KELEBEK','LOKANTA','OGRENCI','PORTAKL','RESIMLI','SEHIRLI','UCURTMA','YILDIZL','ZEYTINL','BAYRAMI','ANKARAL','TATILCI','HAYALCI','GIRISIM','KAPILAR','MANDALI','COCKLRR'],
+      valid: null
+    }
+  },
+  ru: {
+    3: {
+      targets: ['DOM','KOT','LES','MIR','SOK','SYN','DEN','GOD','LUK','MAK','MED','NOS','RIS','SAD','SOL','SON','SUP','SYR','TRI','ZUB','LUG','MAT','RAK','DAR','DUB','DYM','EDA','GAZ','KED','KIT','KUB','LAD','LED','LIS','MEL','NOZ','OSA','PAR','PIR','REV','UHO','RYB','GUB','ZAL','MOH','MUH','PUL','TUK','TAM','RUK'],
+      valid: null
+    },
+    4: {
+      targets: ['VODA','RYBA','MUKA','KOSA','OKNO','NOGA','RUKA','ZIMA','LUNA','LETO','PAPA','MAMA','ROSA','KOZA','VOLK','LISA','MYSH','BELK','GRIB','DVOR','SLON','PARK','LIPA','NOCH','UTRO','DRUG','IGRA','KNIG','KRUG','MOST','PECH','RYAD','SVET','SLOY','TORC','YOLC','ZHUK','ZVUK','BLIN','KASH','TORT','PIRG','STEL','YAGD','SUPK','MEHR','MOLR'],
+      valid: null
+    },
+    5: {
+      targets: ['SOLNT','DERVO','RYBKA','MOLOK','SKAZK','DRUZH','KNIGA','TSVET','OBLAK','MYACH','MESTO','GOROD','SVYET','SNEZH','SLOVO','RYEKA','LIMON','ARBUZ','MOROZ','PESOK','OZERO','GROZA','TRAVA','VESEL','DOBRK','KRASN','SINYY','ZHOLT','BELIY','SAKHR','KHLEB','MASLO','TORTA','POROG','YAHOD','VINOG','YABIK','UTRUN','PTITS','VEZDE'],
+      valid: null
+    },
+    6: {
+      targets: ['SEMIYA','SOLNTS','MOROZK','SOBAKA','KOROVK','LOSHAD','YABLOK','VISHNY','MALINA','LIMONI','BABUSH','DEDUSH','SESTRA','SHKOLA','UCHITL','UCHNIK','TETRAD','KARAND','KNIZHK','SKAZKI','SNEZHK','DOROGA','RYENOK','MYACHK','GORSHK','KRASNY','DEREVN','ZAYCHK','REBYAT','KOTYAT','PTENTS','KARTOF','MASLIK','BRATIC','PRAZNK','OTDYKH','ZVEZDH','ZELYON'],
+      valid: null
+    },
+    7: {
+      targets: ['BABUSHK','DEDUSHK','DEVOCHK','MALCHIK','UCHITEL','UCHENIK','TETRADH','PODRUGI','DRAKONN','SNEZHOK','ZVEZDAA','SOLNSHK','MOROZKO','KOTENOK','PTICHKA','RADOSTY','LYUBOVY','SKAZOCH','KANIKUL','DEREVNY','PRAZDNK','RODNAYA','DOBROTA','KRASOTK','RYBALKA','PIROSHK','SEMYYAA','OTECHST','BATLAAN','MACHEKH'],
+      valid: null
+    }
+  },
+  zh: {
+    3: {
+      targets: ['REN','YAO','NIU','MAO','GOU','YUE','SHU','HUA','CHE','LAN','BAI','MEI','YAN','HUO','FEI','GUI','HAO','JIA','KOU','LIN','MEN','NAN','PAO','QIU','SAI','TOU','WAN','XIE','YIN','ZHI','BAN','CAI','DAN','FAN','GAN','HEI','JIN','KAI','LEI','MIN','PEN','QIN','BEI','SHI','ERR','NUU','AII','LUU'],
+      valid: null
+    },
+    4: {
+      targets: ['MAMA','BABA','SHUI','GEGE','DIDI','HUAR','NIAO','XIAO','MING','CHUN','SHAN','KONG','LONG','FENG','GONG','SHAO','YUNN','XING','QING','DENG','KUAI','TANG','XIAN','SHOU','TIAN','WANG','ZHUO','BANG','LIAN','HONG','QIAN','PANG','CAOO','GUOO','MIAA','YANN','HUOO','TOUU','LANN'],
+      valid: null
+    },
+    5: {
+      targets: ['PENGY','LAOSH','XUESH','KUAIL','MEILI','XIHUN','ZIRAN','CAOMI','PUTAO','PINGG','XIGUA','DOUFU','GONGY','SENLN','TIANQ','DONGW','HUAYU','GUSHI','ZUQIU','YUNDG','YINYU','LANQU','REXIN','YOUHO','SHUXU','YUWEN','YINYE','CHIFN','CONGM','SHUIJ','MAANB','JUZIA','YINHH','NIKNN','MAQUE'],
+      valid: null
+    },
+    6: {
+      targets: ['LAOSHI','KUAILE','MEIHAO','HAIZII','CAOMEI','PUTAOO','XUEXII','TONGXU','LANQIU','ZUQIUU','CHIFAN','ZUOYEE','YOUHAO','REXINN','TIANQI','CHUNTN','DONGTL','XIATIA','CAOYUA','SHULIN','SHANMA','TAIYNG','YUELNG','PINGGU','XIGUAA','XIANGJ','JUZIII','CONGMN','SHUXUE','YUWENN','ZUOYEI'],
+      valid: null
+    },
+    7: {
+      targets: ['TONGXUE','XUESHNG','XUEXIAO','JIATING','SHENGRI','YUNDONG','CONGMNG','YINYUEE','SENLINN','LIUYUAN','HAIYANG','DONGWUY','PENGYOU','KUAILEI','PIAOLNG','CAOMEII','XIANGJI','PUTAOOO','ZUQIUUU','LANQIUU','SHUIJAO','CHINGUY','GONGYUN','CAOYYUA','TAIYANG'],
+      valid: null
+    }
   }
 };
 
@@ -1430,7 +1606,15 @@ const KB_LAYOUTS = {
   it: [['Q','W','E','R','T','Y','U','I','O','P'],['A','S','D','F','G','H','J','K','L'],['ENTER','Z','X','C','V','B','N','M','BACK']],
   hi: [['Q','W','E','R','T','Y','U','I','O','P'],['A','S','D','F','G','H','J','K','L'],['ENTER','Z','X','C','V','B','N','M','BACK']],
   gu: [['Q','W','E','R','T','Y','U','I','O','P'],['A','S','D','F','G','H','J','K','L'],['ENTER','Z','X','C','V','B','N','M','BACK']],
-  sa: [['Q','W','E','R','T','Y','U','I','O','P'],['A','S','D','F','G','H','J','K','L'],['ENTER','Z','X','C','V','B','N','M','BACK']]
+  sa: [['Q','W','E','R','T','Y','U','I','O','P'],['A','S','D','F','G','H','J','K','L'],['ENTER','Z','X','C','V','B','N','M','BACK']],
+  ar: [['Q','W','E','R','T','Y','U','I','O','P'],['A','S','D','F','G','H','J','K','L'],['ENTER','Z','X','C','V','B','N','M','BACK']],
+  he: [['Q','W','E','R','T','Y','U','I','O','P'],['A','S','D','F','G','H','J','K','L'],['ENTER','Z','X','C','V','B','N','M','BACK']],
+  sw: [['Q','W','E','R','T','Y','U','I','O','P'],['A','S','D','F','G','H','J','K','L'],['ENTER','Z','X','C','V','B','N','M','BACK']],
+  ja: [['Q','W','E','R','T','Y','U','I','O','P'],['A','S','D','F','G','H','J','K','L'],['ENTER','Z','X','C','V','B','N','M','BACK']],
+  ko: [['Q','W','E','R','T','Y','U','I','O','P'],['A','S','D','F','G','H','J','K','L'],['ENTER','Z','X','C','V','B','N','M','BACK']],
+  tr: [['Q','W','E','R','T','Y','U','I','O','P'],['A','S','D','F','G','H','J','K','L'],['ENTER','Z','X','C','V','B','N','M','BACK']],
+  ru: [['Q','W','E','R','T','Y','U','I','O','P'],['A','S','D','F','G','H','J','K','L'],['ENTER','Z','X','C','V','B','N','M','BACK']],
+  zh: [['Q','W','E','R','T','Y','U','I','O','P'],['A','S','D','F','G','H','J','K','L'],['ENTER','Z','X','C','V','B','N','M','BACK']]
 };
 
 const LANG_NAMES = {
@@ -1442,7 +1626,15 @@ const LANG_NAMES = {
   it: { name: 'Italiano', flag: '\u{1F1EE}\u{1F1F9}' },
   hi: { name: 'Hindi', flag: '\u{1F1EE}\u{1F1F3}' },
   gu: { name: 'Gujarati', flag: '\u{1F1EE}\u{1F1F3}' },
-  sa: { name: 'Sanskrit', flag: '\u{1F64F}' }
+  sa: { name: 'Sanskrit', flag: '\u{1F64F}' },
+  ar: { name: 'Arabic', flag: '\u{1F1F5}\u{1F1F8}' },
+  he: { name: 'Hebrew', flag: '\u{1F1EE}\u{1F1F1}' },
+  sw: { name: 'Swahili', flag: '\u{1F1F0}\u{1F1EA}' },
+  ja: { name: 'Japanese', flag: '\u{1F1EF}\u{1F1F5}' },
+  ko: { name: 'Korean', flag: '\u{1F1F0}\u{1F1F7}' },
+  tr: { name: 'Turkish', flag: '\u{1F1F9}\u{1F1F7}' },
+  ru: { name: 'Russian', flag: '\u{1F1F7}\u{1F1FA}' },
+  zh: { name: 'Chinese', flag: '\u{1F1E8}\u{1F1F3}' }
 };
 
 // ==================== GAME STATE ====================
