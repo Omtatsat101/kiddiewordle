@@ -621,6 +621,8 @@ body {
 .key.correct { background: var(--green); color: white; }
 .key.present { background: var(--yellow); color: white; }
 .key.absent { background: #787C7E; color: white; }
+.key.locked { opacity: .55; cursor: not-allowed; }
+.key.locked:active { transform: none; }
 
 /* TOAST */
 .toast-container {
@@ -1217,6 +1219,7 @@ body.dark .stores-bar a { color: #8ab4f8; }
   <br><span style="font-size:9px;opacity:0.5;">Property of <a href="https://legacybridgealliancegroup.com" target="_blank" style="color:inherit;">Legacy Bridge Alliance Group</a>. All rights reserved.</span>
 </div>
 
+<script src="data/wordle-en-5.js"></script>
 <script>
 // ==================== MULTI-LANGUAGE WORD LISTS ====================
 const WORD_LISTS = {
@@ -1644,6 +1647,12 @@ const MAX_GUESSES = 6;
 
 let WORDS = [];
 let VALID_WORDS = new Set();
+// Words the player tried that we couldn't validate (neither local list nor
+// dictionary API). Kept in memory for the browser session only.
+let SESSION_REJECTED_WORDS = new Set();
+// Words a previous guess validated via the dictionary API — accept without
+// hitting the network again this session.
+let SESSION_API_ACCEPTED = new Set();
 let targetWord = '';
 let currentRow = 0;
 let currentCol = 0;
@@ -1739,10 +1748,49 @@ function loadWords() {
   }
 
   const data = WORD_LISTS[language][wordLength];
-  WORDS = data.targets;
-  VALID_WORDS = new Set(WORDS);
-  if (data.valid) {
-    data.valid.forEach(w => VALID_WORDS.add(w));
+
+  // Standard Wordle lists (~2,315 solutions, ~14,855 valid guesses) are used
+  // for English 5-letter mode when data/wordle-en-5.js loaded successfully.
+  // Other languages and lengths still use the curated kid-friendly lists.
+  if (language === 'en' && wordLength === 5
+      && Array.isArray(window.WORDLE_EN_5_SOLUTIONS)
+      && Array.isArray(window.WORDLE_EN_5_VALID)) {
+    WORDS = window.WORDLE_EN_5_SOLUTIONS.slice();
+    VALID_WORDS = new Set(window.WORDLE_EN_5_VALID);
+  } else {
+    WORDS = data.targets;
+    VALID_WORDS = new Set(WORDS);
+    if (data.valid) {
+      data.valid.forEach(w => VALID_WORDS.add(w));
+    }
+  }
+}
+
+// ==================== DICTIONARY API FALLBACK ====================
+// Free Dictionary API (English only). HTTP 200 means the word is real.
+// Keyed only for English mode; other languages skip the network call.
+async function isDictionaryWord(word) {
+  if (language !== 'en') return false;
+  if (SESSION_API_ACCEPTED.has(word)) return true;
+  if (SESSION_REJECTED_WORDS.has(word)) return false;
+  try {
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), 4000);
+    const res = await fetch(
+      'https://api.dictionaryapi.dev/api/v2/entries/en/' + encodeURIComponent(word.toLowerCase()),
+      { signal: ctrl.signal }
+    );
+    clearTimeout(t);
+    if (res.ok) {
+      SESSION_API_ACCEPTED.add(word);
+      return true;
+    }
+    SESSION_REJECTED_WORDS.add(word);
+    return false;
+  } catch (e) {
+    // Network or timeout — fail closed, but don't pollute the rejected set
+    // (player may be offline; we don't want to permanently mark valid words bad).
+    return false;
   }
 }
 
@@ -1869,6 +1917,15 @@ function playSound(type) {
 function handleKeyPress(key) {
   if (gameOver) return;
 
+  // Locked letters (proven absent from the target) cannot be retyped.
+  if (key !== 'ENTER' && key !== 'BACK') {
+    const kEl = document.querySelector(`.key[data-key="${key}"]`);
+    if (kEl && kEl.classList.contains('locked')) {
+      playSound('wrong');
+      return;
+    }
+  }
+
   if (key === 'BACK') {
     if (currentCol > 0) {
       currentCol--;
@@ -1903,7 +1960,9 @@ document.addEventListener('keydown', (e) => {
 });
 
 // ==================== SUBMIT ====================
-function submitGuess() {
+let submitInFlight = false;
+async function submitGuess() {
+  if (submitInFlight) return;
   if (currentCol < wordLength) {
     showToast(`Need ${wordLength} letters!`);
     shakeRow(currentRow);
@@ -1911,11 +1970,30 @@ function submitGuess() {
     return;
   }
 
-  if (!VALID_WORDS.has(currentGuess)) {
-    showToast('Not in word list!');
-    shakeRow(currentRow);
-    playSound('wrong');
-    return;
+  const guess = currentGuess;
+  if (!VALID_WORDS.has(guess)) {
+    // Local list miss — try the Free Dictionary API (English only).
+    if (language === 'en' && !SESSION_REJECTED_WORDS.has(guess)) {
+      submitInFlight = true;
+      showToast('Checking dictionary…');
+      const ok = await isDictionaryWord(guess);
+      submitInFlight = false;
+      if (ok) {
+        VALID_WORDS.add(guess); // accept for the rest of the session
+      } else {
+        SESSION_REJECTED_WORDS.add(guess);
+        showToast('Not in dictionary!');
+        shakeRow(currentRow);
+        playSound('wrong');
+        return;
+      }
+    } else {
+      if (language === 'en') SESSION_REJECTED_WORDS.add(guess);
+      showToast('Not in word list!');
+      shakeRow(currentRow);
+      playSound('wrong');
+      return;
+    }
   }
 
   playSound('submit');
@@ -2006,13 +2084,17 @@ function evaluateGuess(guess, target) {
 function updateKeyColor(letter, status) {
   const key = document.querySelector(`.key[data-key="${letter}"]`);
   if (!key) return;
+  // Priority: correct (green) > present (yellow) > absent (dark/locked).
+  // Once a key is correct or present we never demote it, even if a later
+  // guess uses the same letter in a position that resolves to absent.
   const priority = { absent: 1, present: 2, correct: 3 };
   const current = key.classList.contains('correct') ? 3 :
                   key.classList.contains('present') ? 2 :
                   key.classList.contains('absent') ? 1 : 0;
   if (priority[status] > current) {
-    key.classList.remove('correct', 'present', 'absent');
+    key.classList.remove('correct', 'present', 'absent', 'locked');
     key.classList.add(status);
+    if (status === 'absent') key.classList.add('locked');
   }
 }
 
