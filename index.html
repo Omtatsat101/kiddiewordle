@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>KiddieWordle — Free Kids Word Game | Multi-Language Spelling Fun</title>
-<meta name="description" content="Free word game for kids ages 3-12. Choose word length (3-7 letters), play in English, Hindi, Gujarati, Spanish, or French. Parent-configurable difficulty. No ads, no accounts.">
+<title>KiddieWordle — Free Kids Word Game | Spelling Fun for Ages 3-12</title>
+<meta name="description" content="Free word game for kids ages 3-12. Choose word length (3-7 letters) and play in English. Parent-configurable difficulty. No account needed.">
 <meta property="og:title" content="KiddieWordle — Free Kids Word Game">
-<meta property="og:description" content="Wordle for kids! Choose word length, pick a language, and play. Parent-configurable, kid-safe, and free.">
+<meta property="og:description" content="Wordle for kids! Choose your word length and play. Parent-configurable, kid-safe, and free.">
 <meta property="og:url" content="https://kiddiewordle.com">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="KiddieWordle — Free Kids Word Game">
-<meta name="twitter:description" content="Wordle for kids! Choose word length, pick a language, and play. Free, safe, and fun.">
+<meta name="twitter:description" content="Wordle for kids! Choose your word length and play. Free, safe, and fun.">
 <link rel="canonical" href="https://kiddiewordle.com">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#2196F3">
@@ -34,12 +34,12 @@
   "@type": "WebApplication",
   "name": "KiddieWordle",
   "url": "https://kiddiewordle.com",
-  "description": "Free word game for kids ages 3-12. Choose word length (3-7 letters), play in 17 languages including English, Spanish, French, Hindi, Arabic, Hebrew, Swahili, Japanese, Korean, Turkish, Russian, and Chinese.",
+  "description": "Free word game for kids ages 3-12. Choose word length (3-7 letters) and play in English. Parent-configurable difficulty.",
   "applicationCategory": "GameApplication",
   "operatingSystem": "Any",
   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
   "audience": { "@type": "EducationalAudience", "educationalRole": "student", "suggestedMinAge": 3, "suggestedMaxAge": 12 },
-  "inLanguage": ["en", "es", "fr", "de", "pt", "it", "hi", "gu", "sa", "ar", "he", "sw", "ja", "ko", "tr", "ru", "zh"],
+  "inLanguage": ["en"],
   "author": { "@type": "Organization", "name": "KiddieSketch", "url": "https://kiddiesketch.com" }
 }
 </script>
@@ -339,6 +339,47 @@ body {
   color: #666;
   margin-top: 12px;
 }
+
+.lang-coming-soon {
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: #888;
+  padding: 8px 0 4px;
+}
+.lang-coming-soon em { font-style: italic; color: #aaa; }
+body.dark .lang-coming-soon { color: #aaa; }
+body.dark .lang-coming-soon em { color: #777; }
+
+/* NOT-COOL MODAL */
+.modal.not-cool { max-width: 380px; text-align: center; }
+.not-cool-emoji { font-size: 56px; line-height: 1; margin: 4px 0 8px; }
+.not-cool-links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 12px 0 16px;
+}
+.not-cool-links a {
+  display: block;
+  padding: 10px 14px;
+  background: linear-gradient(135deg, var(--blue), var(--blue-dark));
+  color: white;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 14px;
+  transition: transform 0.15s;
+}
+.not-cool-links a:hover { transform: scale(1.03); }
+.not-cool-links a.kw-link-orange {
+  background: linear-gradient(135deg, var(--orange), var(--orange-dark));
+}
+.not-cool-links a.kw-link-red {
+  background: linear-gradient(135deg, #E53935, #C62828);
+}
+body.dark .modal.not-cool { background: #2a2a3e; }
+body.dark .modal.not-cool h2 { color: #ffb74d; }
 
 /* GAME INFO BAR */
 .game-info {
@@ -992,7 +1033,9 @@ body.dark .stores-bar a { color: #8ab4f8; }
       </div>
     </div>
 
-    <div class="setup-section">
+    <!-- Language selector hidden for now — English only.
+         Re-enable by removing the wrapper's hidden attribute. -->
+    <div class="setup-section" hidden>
       <h3>Pick a language</h3>
       <div class="lang-options" id="langOptions">
         <button class="lang-btn selected" data-lang="en">
@@ -1002,67 +1045,15 @@ body.dark .stores-bar a { color: #8ab4f8; }
             <div class="lang-native">Hello!</div>
           </div>
         </button>
-        <button class="lang-btn" data-lang="es">
-          <div class="flag">&#127466;&#127480;</div>
-          <div class="lang-info">
-            <div class="lang-name">Spanish</div>
-            <div class="lang-native">Hola!</div>
-          </div>
-        </button>
-        <button class="lang-btn" data-lang="fr">
-          <div class="flag">&#127467;&#127479;</div>
-          <div class="lang-info">
-            <div class="lang-name">French</div>
-            <div class="lang-native">Bonjour!</div>
-          </div>
-        </button>
-        <button class="lang-btn" data-lang="hi">
-          <div class="flag">&#127470;&#127475;</div>
-          <div class="lang-info">
-            <div class="lang-name">Hindi</div>
-            <div class="lang-native">Namaste!</div>
-          </div>
-        </button>
-        <button class="lang-btn" data-lang="gu">
-          <div class="flag">&#127470;&#127475;</div>
-          <div class="lang-info">
-            <div class="lang-name">Gujarati</div>
-            <div class="lang-native">Kem Cho!</div>
-          </div>
-        </button>
-        <button class="lang-btn" data-lang="sa">
-          <div class="flag">&#128591;</div>
-          <div class="lang-info">
-            <div class="lang-name">Sanskrit</div>
-            <div class="lang-native">Namah!</div>
-          </div>
-        </button>
-        <button class="lang-btn" data-lang="de">
-          <div class="flag">&#127465;&#127466;</div>
-          <div class="lang-info">
-            <div class="lang-name">German</div>
-            <div class="lang-native">Hallo!</div>
-          </div>
-        </button>
-        <button class="lang-btn" data-lang="pt">
-          <div class="flag">&#127463;&#127479;</div>
-          <div class="lang-info">
-            <div class="lang-name">Portuguese</div>
-            <div class="lang-native">Oi!</div>
-          </div>
-        </button>
-        <button class="lang-btn" data-lang="it">
-          <div class="flag">&#127470;&#127481;</div>
-          <div class="lang-info">
-            <div class="lang-name">Italian</div>
-            <div class="lang-native">Ciao!</div>
-          </div>
-        </button>
       </div>
     </div>
 
+    <div class="lang-coming-soon">
+      &#127760; English &middot; <em>more languages coming soon</em>
+    </div>
+
     <button class="play-btn" id="playBtn">PLAY!</button>
-    <div class="setup-badge">No ads &bull; No accounts &bull; 100% free</div>
+    <div class="setup-badge">No accounts &bull; 100% free</div>
   </div>
 </div>
 
@@ -1084,6 +1075,9 @@ body.dark .stores-bar a { color: #8ab4f8; }
 <div class="game-info" id="gameInfo" style="display:none;">
   <div class="badge"><span class="flag-small" id="infoFlag"></span> <span id="infoLang"></span></div>
   <div class="badge" id="infoLength"></div>
+  <div class="badge" id="infoRejected" title="Words this session that weren't in the dictionary" style="display:none;">
+    <span aria-hidden="true">&#10060;</span> <span id="rejectedCount">0</span> not found
+  </div>
 </div>
 
 <!-- STORES & SPONSORS BAR -->
@@ -1191,6 +1185,20 @@ body.dark .stores-bar a { color: #8ab4f8; }
     <br>
     <p>The turtle gives hints after 3 tries!</p>
     <button class="btn btn-blue" onclick="document.getElementById('helpModal').classList.remove('show')">Got it!</button>
+  </div>
+</div>
+
+<!-- NOT COOL MODAL — fired when a guess matches the UNSAFE_WORDS blocklist.
+     Links are populated from the KW_LINKS config object in JS so they can be
+     edited in one place (planned: editable via ohm.homes). -->
+<div class="modal-overlay" id="notCoolModal">
+  <div class="modal not-cool">
+    <div class="not-cool-emoji" aria-hidden="true">&#128571;</div>
+    <h2>Sorry, that's not cool!</h2>
+    <p>Let's try a kinder word. We're a friendly word game for kids.</p>
+    <p style="margin-top:14px;font-weight:700;color:#444;">While you think of a nicer word, check these out:</p>
+    <div class="not-cool-links" id="notCoolLinks"></div>
+    <button class="btn btn-blue" onclick="document.getElementById('notCoolModal').classList.remove('show')">Try again</button>
   </div>
 </div>
 
@@ -1653,6 +1661,66 @@ let SESSION_REJECTED_WORDS = new Set();
 // Words a previous guess validated via the dictionary API — accept without
 // hitting the network again this session.
 let SESSION_API_ACCEPTED = new Set();
+
+// ==================== KIDDIE BRAND LINKS (configurable) ====================
+// One source of truth for cross-promo links. Edit this list to add or change
+// destinations — modal contents regenerate from it on each open.
+// Planned: this list will be remotely editable via ohm.homes.
+const KW_LINKS = [
+  { label: '✏️ KiddieSketch — drawing fun',     url: 'https://kiddiesketch.com',                            kind: 'blue'   },
+  { label: '🌍 KiddieGo — the kids megastore',  url: 'https://kiddiego.com',                                kind: 'orange' },
+  { label: '▶️ Watch KiddieSketchTV on YouTube',     url: 'https://www.youtube.com/@KiddieSketchTV',             kind: 'red'    }
+];
+
+// ==================== UNSAFE-WORD BLOCKLIST ====================
+// Triggers the "Sorry, that's not cool" modal. Kept in a Set for O(1) lookup.
+const UNSAFE_WORDS = new Set([
+  "ARSES","BIMBO","BITCH","BOOBS","BOOBY","BOOTY","BOOZE","BOOZY","BUTTS",
+  "COCKS","COCKY","CRAPS","DICKS","DILDO","DOPED","DOPER","DOPES","DRUNK",
+  "DYKES","FANNY","FARTS","FECES","FUCKS","HORNY","HUSSY","JIZZY","JUNKY",
+  "KINKY","NAKED","NUDES","NUDIE","PERVE","PERVS","PIMPS","POOPS","POOPY",
+  "POOTS","PORNO","PORNS","PORNY","PRICK","PUSSY","QUEER","QUIMS","RAPED",
+  "RAPER","RAPES","SCREW","SHITE","SHITS","SLAGS","SLUTS","SLUTY","SMUTS",
+  "SPUNK","TITTS","TITTY","TURDS","TWATS","WANKS","WHORE"
+]);
+
+function isUnsafeGuess(word) {
+  return UNSAFE_WORDS.has(word.toUpperCase());
+}
+
+function showNotCoolModal() {
+  const list = document.getElementById('notCoolLinks');
+  if (list) {
+    list.innerHTML = '';
+    KW_LINKS.forEach(link => {
+      const a = document.createElement('a');
+      a.href = link.url;
+      a.target = '_blank';
+      a.rel = 'noopener';
+      a.textContent = link.label;
+      if (link.kind === 'orange') a.classList.add('kw-link-orange');
+      else if (link.kind === 'red') a.classList.add('kw-link-red');
+      list.appendChild(a);
+    });
+  }
+  document.getElementById('notCoolModal').classList.add('show');
+  playSound('wrong');
+}
+
+// Render the small "X not found" badge in the game info bar.
+function updateRejectedCounter() {
+  const badge = document.getElementById('infoRejected');
+  const count = document.getElementById('rejectedCount');
+  if (!badge || !count) return;
+  const n = SESSION_REJECTED_WORDS.size;
+  count.textContent = n;
+  badge.style.display = n > 0 ? '' : 'none';
+}
+function noteRejectedWord(word) {
+  const before = SESSION_REJECTED_WORDS.size;
+  SESSION_REJECTED_WORDS.add(word);
+  if (SESSION_REJECTED_WORDS.size !== before) updateRejectedCounter();
+}
 let targetWord = '';
 let currentRow = 0;
 let currentCol = 0;
@@ -1723,6 +1791,8 @@ function showGameUI() {
   document.getElementById('infoFlag').textContent = langData.flag;
   document.getElementById('infoLang').textContent = langData.name;
   document.getElementById('infoLength').textContent = wordLength + ' letters';
+  // Reflect the cumulative session not-found counter (hidden when zero).
+  updateRejectedCounter();
 }
 
 function hideGameUI() {
@@ -1767,31 +1837,91 @@ function loadWords() {
 }
 
 // ==================== DICTIONARY API FALLBACK ====================
-// Free Dictionary API (English only). HTTP 200 means the word is real.
-// Keyed only for English mode; other languages skip the network call.
+// Three free, no-auth, open-source-friendly English dictionary APIs chained
+// as fallbacks. The first one that says yes wins. Each call is session-cached
+// so we never re-ping for the same word. Each has a short timeout so a slow
+// server can't stall the game.
+//
+// 1) api.dictionaryapi.dev — Free Dictionary API. HTTP 200 = word exists.
+// 2) api.datamuse.com      — sp=<word>&max=1; exact match in response = exists.
+// 3) en.wiktionary.org     — MediaWiki action=query; page id != -1 = exists.
+//                            Wiktionary has 1M+ English entries — the deepest
+//                            free, community-edited dictionary on the web.
 async function isDictionaryWord(word) {
   if (language !== 'en') return false;
   if (SESSION_API_ACCEPTED.has(word)) return true;
   if (SESSION_REJECTED_WORDS.has(word)) return false;
+
+  const lower = word.toLowerCase();
+  let networkErrors = 0;
+
+  const accept = () => { SESSION_API_ACCEPTED.add(word); return true; };
+
+  // ---- Source 1: dictionaryapi.dev ----
   try {
     const ctrl = new AbortController();
-    const t = setTimeout(() => ctrl.abort(), 4000);
+    const t = setTimeout(() => ctrl.abort(), 3000);
     const res = await fetch(
-      'https://api.dictionaryapi.dev/api/v2/entries/en/' + encodeURIComponent(word.toLowerCase()),
+      'https://api.dictionaryapi.dev/api/v2/entries/en/' + encodeURIComponent(lower),
+      { signal: ctrl.signal }
+    );
+    clearTimeout(t);
+    if (res.ok) return accept();
+    // 404 falls through to source 2.
+  } catch (e) {
+    networkErrors++;
+  }
+
+  // ---- Source 2: api.datamuse.com (spell-match) ----
+  try {
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), 3000);
+    const res = await fetch(
+      'https://api.datamuse.com/words?sp=' + encodeURIComponent(lower) + '&max=1',
       { signal: ctrl.signal }
     );
     clearTimeout(t);
     if (res.ok) {
-      SESSION_API_ACCEPTED.add(word);
-      return true;
+      const data = await res.json();
+      if (Array.isArray(data) && data.length > 0 && data[0].word === lower) {
+        return accept();
+      }
     }
-    SESSION_REJECTED_WORDS.add(word);
-    return false;
   } catch (e) {
-    // Network or timeout — fail closed, but don't pollute the rejected set
-    // (player may be offline; we don't want to permanently mark valid words bad).
-    return false;
+    networkErrors++;
   }
+
+  // ---- Source 3: en.wiktionary.org (MediaWiki action API) ----
+  // Sends origin=* so the response includes Access-Control-Allow-Origin.
+  // We try lowercase first (Wiktionary entries are usually lowercase) and
+  // fall back to original casing for proper-noun-style words.
+  try {
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), 3000);
+    const url = 'https://en.wiktionary.org/w/api.php?format=json&origin=*&action=query'
+              + '&titles=' + encodeURIComponent(lower) + '%7C' + encodeURIComponent(word);
+    const res = await fetch(url, { signal: ctrl.signal });
+    clearTimeout(t);
+    if (res.ok) {
+      const data = await res.json();
+      const pages = data && data.query && data.query.pages;
+      if (pages) {
+        // Wiktionary returns pageid -1 for missing pages; any positive id means
+        // a real entry exists for that spelling.
+        const exists = Object.keys(pages).some(k => k !== '-1' && Number(k) > 0);
+        if (exists) return accept();
+      }
+    }
+  } catch (e) {
+    networkErrors++;
+  }
+
+  // Three sources hit, none confirmed. If every call errored (likely offline),
+  // don't permanently brand the word as rejected.
+  if (networkErrors === 3) return false;
+
+  noteRejectedWord(word);
+  return false;
 }
 
 function getRandomWord() {
@@ -1913,6 +2043,20 @@ function playSound(type) {
   } catch(e) {}
 }
 
+// Wipe whatever's typed in the current row (used by the unsafe-word guard
+// so a flagged guess doesn't sit on the board after the modal closes).
+function clearCurrentRow() {
+  for (let c = 0; c < wordLength; c++) {
+    const tile = document.querySelector(`.tile[data-row="${currentRow}"][data-col="${c}"]`);
+    if (tile) {
+      tile.textContent = '';
+      tile.classList.remove('filled');
+    }
+  }
+  currentGuess = '';
+  currentCol = 0;
+}
+
 // ==================== INPUT ====================
 function handleKeyPress(key) {
   if (gameOver) return;
@@ -1971,6 +2115,16 @@ async function submitGuess() {
   }
 
   const guess = currentGuess;
+
+  // Unsafe-word guard — fires the friendly "not cool" modal before any
+  // dictionary check. The guess is also wiped from the row so the kid
+  // doesn't see it sitting on the board.
+  if (isUnsafeGuess(guess)) {
+    clearCurrentRow();
+    showNotCoolModal();
+    return;
+  }
+
   if (!VALID_WORDS.has(guess)) {
     // Local list miss — try the Free Dictionary API (English only).
     if (language === 'en' && !SESSION_REJECTED_WORDS.has(guess)) {
@@ -1981,14 +2135,14 @@ async function submitGuess() {
       if (ok) {
         VALID_WORDS.add(guess); // accept for the rest of the session
       } else {
-        SESSION_REJECTED_WORDS.add(guess);
+        noteRejectedWord(guess);
         showToast('Not in dictionary!');
         shakeRow(currentRow);
         playSound('wrong');
         return;
       }
     } else {
-      if (language === 'en') SESSION_REJECTED_WORDS.add(guess);
+      if (language === 'en') noteRejectedWord(guess);
       showToast('Not in word list!');
       shakeRow(currentRow);
       playSound('wrong');

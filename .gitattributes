@@ -1,0 +1,9 @@
+# Normalize all text files to LF in the repo to keep diffs clean across
+# Windows + OneDrive checkouts (which otherwise rewrite files to CRLF).
+* text=auto eol=lf
+*.html text eol=lf
+*.js   text eol=lf
+*.json text eol=lf
+*.md   text eol=lf
+*.txt  text eol=lf
+CNAME  text eol=lf
