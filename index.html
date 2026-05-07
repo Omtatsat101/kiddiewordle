@@ -349,6 +349,76 @@ body.dark .hangman-word .slot { border-bottom-color: #8ab4f8; }
   letter-spacing: 2px; min-height: 20px; text-align: center;
 }
 
+/* ANAGRAM SCRAMBLE — pool of shuffled letters + slots that fill on tap. */
+.anagram-stage {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  padding: 8px;
+}
+body.anagram-mode .anagram-stage   { display: flex; }
+body.anagram-mode .board-container { display: none !important; }
+body.anagram-mode #keyboard        { display: none !important; }
+
+.an-slots, .an-pool {
+  display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+}
+.an-slot, .an-tile {
+  width: 56px; height: 56px;
+  display: grid; place-items: center;
+  font-size: 26px; font-weight: 900;
+  border-radius: 12px;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  transition: transform .12s ease, background .15s, border-color .15s;
+}
+.an-slot {
+  background: #fff;
+  border: 3px dashed #B3D8FF;
+  color: var(--blue);
+  cursor: pointer;
+}
+.an-slot.filled  { border-style: solid; background: #E3F2FD; }
+.an-slot.correct { background: #E8F5E9; border-color: var(--green); color: var(--green); }
+.an-slot.wrong   { animation: kw-shake 0.4s; background: #FFEBEE; border-color: #d32f2f; color: #d32f2f; }
+.an-tile {
+  background: linear-gradient(180deg, #FFF8E1, #FFECB3);
+  border: 3px solid #FFB300;
+  color: #5D4037;
+  cursor: pointer;
+  box-shadow: 0 2px 0 #FFB300;
+}
+.an-tile:hover:not(.used) { transform: translateY(-2px); }
+.an-tile.used  { opacity: 0.25; pointer-events: none; box-shadow: none; }
+.an-controls   { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.an-btn {
+  padding: 10px 18px; border-radius: 999px; border: none;
+  font-size: 14px; font-weight: 800; cursor: pointer;
+  font-family: inherit;
+}
+.an-btn.primary  { background: var(--green); color: #fff; }
+.an-btn.primary:disabled { background: #C8E6C9; color: #fff; cursor: not-allowed; }
+.an-btn.shuffle  { background: var(--orange); color: #fff; }
+.an-btn.clear    { background: #eee; color: #555; }
+.an-meta {
+  font-size: 13px; font-weight: 700; color: #888;
+  letter-spacing: 1px; min-height: 20px; text-align: center;
+}
+.an-meta .wrong-count { color: #d32f2f; }
+body.dark .an-slot   { background: #2a2a2a; border-color: #555; color: #8ab4f8; }
+body.dark .an-slot.filled  { background: #1a3a5c; border-color: #8ab4f8; }
+body.dark .an-slot.correct { background: #1B5E20; border-color: #81C784; color: #81C784; }
+body.dark .an-tile   { background: linear-gradient(180deg, #4E342E, #3E2723); color: #FFE082; border-color: #FFB300; }
+body.dark .an-meta   { color: #aaa; }
+body.dark .an-btn.clear { background: #444; color: #ddd; }
+@keyframes kw-shake {
+  0%,100% { transform: translateX(0); }
+  25%     { transform: translateX(-4px); }
+  75%     { transform: translateX(4px); }
+}
+
 .length-btn .num {
   font-size: 24px;
   font-weight: 900;
@@ -1412,7 +1482,7 @@ body.dark .a11y-panel h3 { color: #8ab4f8; }
           <div class="game-name">Hangman</div>
           <div class="game-sub">Save the friend! 6 wrong guesses max</div>
         </button>
-        <button class="game-btn" data-game="anagram" disabled>
+        <button class="game-btn" data-game="anagram">
           <div class="game-emoji">&#128301;</div>
           <div class="game-name">Anagram Scramble</div>
           <div class="game-sub">Coming soon</div>
@@ -1573,6 +1643,20 @@ body.dark .a11y-panel h3 { color: #8ab4f8; }
   </svg>
   <div class="hangman-word" id="hangmanWord"></div>
   <div class="hangman-wrong" id="hangmanWrong"></div>
+</div>
+
+<!-- ANAGRAM SCRAMBLE STAGE — only shown when body.anagram-mode is set.
+     Reuses currently-loaded WORDS pool. Tap pool tiles to fill slots in order;
+     tap a filled slot to send the tile back to the pool. 6 wrong submits = lose. -->
+<div class="anagram-stage" id="anagramStage">
+  <div class="an-meta" id="anMeta">Tap the letters in order to spell the word</div>
+  <div class="an-slots" id="anSlots" role="list" aria-label="Letter slots"></div>
+  <div class="an-pool" id="anPool" role="list" aria-label="Letter pool"></div>
+  <div class="an-controls">
+    <button class="an-btn shuffle" id="anShuffleBtn" type="button">🔀 Shuffle</button>
+    <button class="an-btn clear" id="anClearBtn" type="button">↺ Clear</button>
+    <button class="an-btn primary" id="anSubmitBtn" type="button" disabled>Check ✓</button>
+  </div>
 </div>
 
 <!-- KEYBOARD -->
@@ -2184,7 +2268,7 @@ const LANG_NAMES = {
 
 // ==================== GAME STATE ====================
 let wordLength = 5; // Default = Classic. (3=Tots, 4=Easy, 5=Classic, 6=Medium, 7=Hard, 8=Expert, 9=Genius)
-let gameType = 'wordle'; // 'wordle' | 'hangman' (anagram/wordsearch are stubs)
+let gameType = 'wordle'; // 'wordle' | 'hangman' | 'anagram' (wordsearch stub)
 let language = 'en';
 const MAX_GUESSES = 6;
 
@@ -3218,10 +3302,13 @@ function startGame(showSetup = true) {
   targetWord = getRandomWord() || 'APPLE';
 
   document.body.classList.toggle('hangman-mode', gameType === 'hangman');
+  document.body.classList.toggle('anagram-mode', gameType === 'anagram');
 
   buildKeyboard();
   if (gameType === 'hangman') {
     startHangman();
+  } else if (gameType === 'anagram') {
+    startAnagram();
   } else {
     buildBoard();
   }
@@ -3310,6 +3397,183 @@ function handleHangmanLetter(letter) {
   }
   renderHangman();
 }
+
+// ==================== ANAGRAM SCRAMBLE ENGINE ====================
+// Uses the currently-loaded WORDS pool, same length as the active difficulty.
+// Pool of shuffled letter tiles → tap to fill ordered slots. Tap a filled
+// slot to send its tile back to the pool. Submit checks order. Max 6 wrong
+// submits = lose, mirroring Wordle/Hangman scoring for stats consistency.
+let AN_STATE = null;
+
+function anShuffleArray(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function startAnagram() {
+  // Re-shuffle until we get a non-trivial scramble (not the original word).
+  let pool;
+  let attempts = 0;
+  do {
+    pool = anShuffleArray(targetWord.split(''));
+    attempts++;
+  } while (pool.join('') === targetWord && attempts < 8);
+
+  AN_STATE = {
+    word: targetWord,
+    pool: pool.map(l => ({ letter: l, used: false })),
+    slots: targetWord.split('').map(() => null), // each slot: null or { poolIdx }
+    wrong: 0,
+    locked: false
+  };
+  document.getElementById('boardContainer').style.display = 'none';
+  document.getElementById('hangmanStage').style.display = 'none';
+  document.getElementById('anagramStage').style.display = 'flex';
+  // Anagram has no keyboard interaction — hide it.
+  document.getElementById('keyboard').style.display = 'none';
+  renderAnagram();
+}
+
+function renderAnagram() {
+  if (!AN_STATE) return;
+  // Slots row.
+  const slotsEl = document.getElementById('anSlots');
+  slotsEl.innerHTML = '';
+  AN_STATE.slots.forEach((slot, i) => {
+    const el = document.createElement('div');
+    el.className = 'an-slot' + (slot ? ' filled' : '');
+    el.setAttribute('role', 'listitem');
+    el.textContent = slot ? AN_STATE.pool[slot.poolIdx].letter : '';
+    el.dataset.idx = i;
+    el.addEventListener('click', () => anagramTapSlot(i));
+    slotsEl.appendChild(el);
+  });
+  // Pool row.
+  const poolEl = document.getElementById('anPool');
+  poolEl.innerHTML = '';
+  AN_STATE.pool.forEach((tile, i) => {
+    const el = document.createElement('div');
+    el.className = 'an-tile' + (tile.used ? ' used' : '');
+    el.setAttribute('role', 'listitem');
+    el.textContent = tile.letter;
+    el.dataset.idx = i;
+    el.addEventListener('click', () => anagramTapTile(i));
+    poolEl.appendChild(el);
+  });
+  // Submit enabled only when every slot filled.
+  const filled = AN_STATE.slots.every(Boolean);
+  document.getElementById('anSubmitBtn').disabled = !filled || AN_STATE.locked;
+  // Status meta.
+  const meta = document.getElementById('anMeta');
+  if (AN_STATE.wrong > 0) {
+    meta.innerHTML = 'Tap the letters in order. <span class="wrong-count">' + AN_STATE.wrong + ' / 6 wrong</span>';
+  } else {
+    meta.textContent = 'Tap the letters in order to spell the word';
+  }
+}
+
+function anagramTapTile(poolIdx) {
+  if (!AN_STATE || AN_STATE.locked || gameOver) return;
+  if (AN_STATE.pool[poolIdx].used) return;
+  // Find the next empty slot.
+  const nextEmpty = AN_STATE.slots.findIndex(s => s === null);
+  if (nextEmpty === -1) return;
+  AN_STATE.slots[nextEmpty] = { poolIdx };
+  AN_STATE.pool[poolIdx].used = true;
+  playSound('correct');
+  renderAnagram();
+}
+
+function anagramTapSlot(slotIdx) {
+  if (!AN_STATE || AN_STATE.locked || gameOver) return;
+  const slot = AN_STATE.slots[slotIdx];
+  if (!slot) return;
+  AN_STATE.pool[slot.poolIdx].used = false;
+  AN_STATE.slots[slotIdx] = null;
+  renderAnagram();
+}
+
+function anagramShuffle() {
+  if (!AN_STATE || AN_STATE.locked || gameOver) return;
+  // Re-shuffle the pool while preserving used-state by letter so slots stay valid.
+  const lettersInPool = AN_STATE.pool.map((t, i) => ({ letter: t.letter, used: t.used, oldIdx: i }));
+  const shuffled = anShuffleArray(lettersInPool);
+  // Build new pool + remap slots to new indices.
+  const newPool = shuffled.map(s => ({ letter: s.letter, used: s.used }));
+  const remap = {};
+  shuffled.forEach((s, newIdx) => { remap[s.oldIdx] = newIdx; });
+  AN_STATE.pool = newPool;
+  AN_STATE.slots = AN_STATE.slots.map(slot => slot ? { poolIdx: remap[slot.poolIdx] } : null);
+  renderAnagram();
+}
+
+function anagramClear() {
+  if (!AN_STATE || AN_STATE.locked || gameOver) return;
+  AN_STATE.slots.forEach(slot => {
+    if (slot) AN_STATE.pool[slot.poolIdx].used = false;
+  });
+  AN_STATE.slots = AN_STATE.slots.map(() => null);
+  renderAnagram();
+}
+
+function anagramSubmit() {
+  if (!AN_STATE || AN_STATE.locked || gameOver) return;
+  if (!AN_STATE.slots.every(Boolean)) return;
+  const guess = AN_STATE.slots.map(s => AN_STATE.pool[s.poolIdx].letter).join('');
+  if (guess === AN_STATE.word) {
+    // WIN
+    AN_STATE.locked = true;
+    gameOver = true;
+    playSound('correct');
+    // Mark all slots correct visually.
+    document.querySelectorAll('#anSlots .an-slot').forEach(el => el.classList.add('correct'));
+    KW_AI.encouragement('win', { game: 'anagram', target: AN_STATE.word })
+      .then(msg => { showToast(msg); speakIfEnabled(msg); })
+      .catch(() => showToast('You unscrambled it!'));
+    logKwEvent('win', { game: 'anagram' });
+    launchConfetti();
+    updateStats(true, AN_STATE.wrong + 1);
+    setTimeout(() => showStatsModal(), 1500);
+  } else {
+    // WRONG
+    AN_STATE.wrong++;
+    playSound('wrong');
+    // Shake the slots, then send all tiles back to the pool.
+    document.querySelectorAll('#anSlots .an-slot').forEach(el => el.classList.add('wrong'));
+    setTimeout(() => {
+      if (!AN_STATE) return;
+      AN_STATE.slots.forEach(slot => {
+        if (slot) AN_STATE.pool[slot.poolIdx].used = false;
+      });
+      AN_STATE.slots = AN_STATE.slots.map(() => null);
+      if (AN_STATE.wrong >= 6) {
+        gameOver = true;
+        AN_STATE.locked = true;
+        KW_AI.encouragement('loss', { game: 'anagram', target: AN_STATE.word })
+          .then(msg => { showToast(msg + ' It was ' + AN_STATE.word + '!'); speakIfEnabled(msg); })
+          .catch(() => showToast('It was ' + AN_STATE.word + '!'));
+        logKwEvent('loss', { game: 'anagram' });
+        updateStats(false, 0);
+        setTimeout(() => showStatsModal(), 1800);
+      }
+      renderAnagram();
+    }, 450);
+  }
+}
+
+// Wire the three control buttons once at init.
+document.addEventListener('DOMContentLoaded', () => {
+  const sb = document.getElementById('anShuffleBtn');
+  const cb = document.getElementById('anClearBtn');
+  const ub = document.getElementById('anSubmitBtn');
+  if (sb) sb.addEventListener('click', anagramShuffle);
+  if (cb) cb.addEventListener('click', anagramClear);
+  if (ub) ub.addEventListener('click', anagramSubmit);
+});
 
 // ==================== INIT ====================
 initSetup();
