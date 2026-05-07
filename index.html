@@ -41,6 +41,25 @@
   });
 </script>
 
+<!-- AD PREVIEW MODE bootstrap — runs after DOM is parsed.
+     Adds body.ad-preview when ANY <ins data-ad-slot> still starts with "0000".
+     The CSS in <style> renders pink-dashed visible boxes so the layout is
+     verifiable. The moment real AdSense IDs are pasted in, this no-ops. -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  try {
+    var slots = document.querySelectorAll('ins.adsbygoogle[data-ad-slot]');
+    for (var i = 0; i < slots.length; i++) {
+      var id = String(slots[i].getAttribute('data-ad-slot') || '');
+      if (id.indexOf('0000') === 0) {
+        document.body.classList.add('ad-preview');
+        return;
+      }
+    }
+  } catch (e) {}
+});
+</script>
+
 <!-- JSON-LD Structured Data -->
 <script type="application/ld+json">
 {
@@ -1189,6 +1208,52 @@ body.dark .ad-label { color: #777; }
 @media (min-width: 1100px) {
   body.show-rails .ad-rail { display: block; }
 }
+
+/* AD PREVIEW MODE — auto-active while placeholder slot IDs (0000…) remain.
+   Renders all 5 ad zones as pink-dashed visible boxes so layout is verifiable
+   before real AdSense IDs land. The body.ad-preview class is added at boot
+   when any slot still starts with "0000" and removed automatically once real
+   IDs replace the placeholders. Pure CSS — no AdSense dependency. */
+body.ad-preview #adTop,
+body.ad-preview #adBottom,
+body.ad-preview .modal .ad-slot,
+body.ad-preview .ad-rail {
+  display: block !important;
+  border: 2px dashed #ec4899;
+  background: #fff0f6;
+  border-radius: 10px;
+  padding: 18px 10px 10px;
+  position: relative;
+  min-height: 100px;
+}
+body.ad-preview .ad-rail { position: fixed; }
+body.ad-preview .ad-slot::before,
+body.ad-preview .ad-rail::before {
+  content: "AD PREVIEW · replace placeholder slot ID in <ins data-ad-slot=\"…\">";
+  position: absolute; top: 4px; left: 10px; right: 10px;
+  font-size: 10px; color: #be185d; font-weight: 800;
+  letter-spacing: 0.06em; text-transform: uppercase; text-align: left;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+body.ad-preview .ad-rail.left::before  { content: "LEFT RAIL · 160×600 placeholder"; }
+body.ad-preview .ad-rail.right::before { content: "RIGHT RAIL · 160×600 placeholder"; }
+body.ad-preview #adTop::before    { content: "TOP BANNER · responsive · slot 0000000001"; }
+body.ad-preview #adBottom::before { content: "BOTTOM BANNER · responsive · slot 0000000002"; }
+body.ad-preview .modal .ad-slot::before { content: "POST-GAME MODAL · 320×100 · slot 0000000005"; }
+@media (min-width: 1100px) {
+  body.ad-preview .ad-rail { display: block !important; }
+}
+@media (max-width: 1099px) {
+  body.ad-preview .ad-rail { display: none !important; }
+}
+body.dark.ad-preview #adTop,
+body.dark.ad-preview #adBottom,
+body.dark.ad-preview .modal .ad-slot,
+body.dark.ad-preview .ad-rail {
+  background: #2a1620; border-color: #f472b6;
+}
+body.dark.ad-preview .ad-slot::before,
+body.dark.ad-preview .ad-rail::before { color: #f9a8d4; }
 
 /* DARK MODE TOGGLE */
 .dark-toggle {
