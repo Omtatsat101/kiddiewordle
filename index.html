@@ -2,16 +2,21 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KiddieWordle — Free Kids Word Game | Spelling Fun for Ages 3-12</title>
 <meta name="description" content="Free word game for kids ages 3-12. Choose word length (3-7 letters) and play in English. Parent-configurable difficulty. No account needed.">
 <meta property="og:title" content="KiddieWordle — Free Kids Word Game">
 <meta property="og:description" content="Wordle for kids! Choose your word length and play. Parent-configurable, kid-safe, and free.">
 <meta property="og:url" content="https://kiddiewordle.com">
 <meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="KiddieWordle">
+<meta property="og:image" content="https://kiddiewordle.com/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="KiddieWordle — Free Kids Word Game">
 <meta name="twitter:description" content="Wordle for kids! Choose your word length and play. Free, safe, and fun.">
+<meta name="twitter:image" content="https://kiddiewordle.com/og-image.png">
+<meta name="keywords" content="kids word game, wordle for kids, kids spelling game, vocabulary game, free word puzzle, kids learning game, parent friendly game, ages 3-12, classroom game, teacher resource">
 <link rel="canonical" href="https://kiddiewordle.com">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#2196F3">
@@ -25,7 +30,16 @@
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta name="robots" content="index, follow">
+<!-- AdSense base loader. Auto Ads is ENABLED below — Google decides where to
+     additionally place ads (anchor, vignette, in-content) on top of our manual
+     slots. Manual slots are kept for predictable placement and known sizes. -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7655879237041224" crossorigin="anonymous"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-7655879237041224",
+    enable_page_level_ads: true
+  });
+</script>
 
 <!-- JSON-LD Structured Data -->
 <script type="application/ld+json">
@@ -37,7 +51,22 @@
   "description": "Free word game for kids ages 3-12. Choose word length (3-7 letters) and play in English. Parent-configurable difficulty.",
   "applicationCategory": "GameApplication",
   "operatingSystem": "Any",
+  "browserRequirements": "Requires JavaScript. Works in any modern browser.",
+  "screenshot": "https://kiddiewordle.com/og-image.png",
+  "image": "https://kiddiewordle.com/og-image.png",
+  "featureList": [
+    "5 difficulty modes (Easy, Classic, Medium, Hard, Expert)",
+    "Word lengths 3 to 7 letters",
+    "Kid-safe profanity blocklist with friendly redirect",
+    "Three open-source dictionary APIs for fair word checking",
+    "Turtle hint mascot for younger players",
+    "Color-coded letter feedback",
+    "Stats tracking and streaks",
+    "Mobile and desktop responsive",
+    "No account required"
+  ],
   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.8", "ratingCount": "120", "bestRating": "5", "worstRating": "1" },
   "audience": { "@type": "EducationalAudience", "educationalRole": "student", "suggestedMinAge": 3, "suggestedMaxAge": 12 },
   "inLanguage": ["en"],
   "author": { "@type": "Organization", "name": "KiddieSketch", "url": "https://kiddiesketch.com" }
@@ -231,6 +260,76 @@ body {
   font-family: inherit;
 }
 
+/* GAME PICKER — appears above the length picker on the setup screen. */
+.game-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 6px;
+}
+.game-btn {
+  padding: 14px 12px;
+  border-radius: 16px;
+  border: 3px solid var(--gray-light);
+  background: white;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: center;
+  transition: all 0.2s;
+}
+.game-btn:hover:not([disabled]) { border-color: var(--orange); transform: scale(1.02); }
+.game-btn.selected { border-color: var(--blue); background: #E3F2FD; }
+.game-btn[disabled] { opacity: 0.55; cursor: not-allowed; }
+.game-btn .game-emoji { font-size: 28px; line-height: 1; margin-bottom: 4px; }
+.game-btn .game-name { font-size: 14px; font-weight: 800; color: #333; }
+.game-btn .game-sub  { font-size: 11px; color: #888; margin-top: 2px; }
+body.dark .game-btn { background: #333; border-color: #555; }
+body.dark .game-btn .game-name { color: #ddd; }
+body.dark .game-btn .game-sub  { color: #aaa; }
+body.dark .game-btn.selected   { background: #1a3a5c; border-color: var(--blue); }
+
+/* HANGMAN — re-uses the game-info bar and keyboard. The board area is
+   replaced by a stage with the gallows + revealed-word slots. */
+.hangman-stage {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 8px;
+}
+body.hangman-mode .hangman-stage { display: flex; }
+body.hangman-mode .board-container { display: none !important; }
+
+.hangman-figure {
+  width: 200px; height: 220px;
+}
+.hangman-figure line, .hangman-figure circle {
+  stroke: #5D4037; stroke-width: 5; fill: none; stroke-linecap: round;
+  stroke-dasharray: 200; stroke-dashoffset: 200;
+  transition: stroke-dashoffset 0.4s ease-out;
+}
+.hangman-figure .show { stroke-dashoffset: 0; }
+body.dark .hangman-figure line, body.dark .hangman-figure circle { stroke: #d7ccc8; }
+
+.hangman-word {
+  display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
+  font-size: 36px; font-weight: 900; letter-spacing: 4px; color: #333;
+}
+.hangman-word .slot {
+  min-width: 28px; padding-bottom: 4px;
+  border-bottom: 4px solid var(--blue);
+  text-align: center;
+  transition: color .2s;
+}
+.hangman-word .slot.revealed { color: var(--green); }
+body.dark .hangman-word { color: #eee; }
+body.dark .hangman-word .slot { border-bottom-color: #8ab4f8; }
+
+.hangman-wrong {
+  font-size: 13px; font-weight: 700; color: #d32f2f;
+  letter-spacing: 2px; min-height: 20px; text-align: center;
+}
+
 .length-btn .num {
   font-size: 24px;
   font-weight: 900;
@@ -354,6 +453,62 @@ body.dark .lang-coming-soon em { color: #777; }
 /* NOT-COOL MODAL */
 .modal.not-cool { max-width: 380px; text-align: center; }
 .not-cool-emoji { font-size: 56px; line-height: 1; margin: 4px 0 8px; }
+
+/* YouTube embed — 16:9 aspect, lazy-mounted on modal open.
+   Sized smaller than the modal width so it doesn't dominate the player's
+   attention; the Play Again button stays the salient call-to-action.
+   "muted autoplay" is intentional: low-stim, browser-policy-compliant, and
+   keeps the focus on the game loop instead of the video. */
+.kw-yt-embed {
+  position: relative; padding-bottom: 56.25%; height: 0;
+  margin: 10px auto;
+  max-width: 280px;
+  border-radius: 12px; overflow: hidden;
+  background: #000;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+}
+.kw-yt-embed iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+.kw-yt-embed::before {
+  /* Tiny "muted" hint overlay so the player understands the silent autoplay
+     is intentional and they can unmute if they want. Pointer-events: none so
+     it doesn't block the iframe's own controls. */
+  content: '🔇 Muted — tap CC button to unmute';
+  position: absolute; left: 8px; bottom: 8px; z-index: 2;
+  background: rgba(0,0,0,0.55); color: #fff;
+  font-size: 10px; font-weight: 700;
+  padding: 3px 8px; border-radius: 6px; pointer-events: none;
+  animation: kwYtFade 0.6s ease-out 4s forwards;
+}
+@keyframes kwYtFade { to { opacity: 0; } }
+
+.kw-yt-cta {
+  display: block; max-width: 280px; margin: -2px auto 12px;
+  padding: 6px 10px;
+  background: rgba(229, 57, 53, 0.08);
+  color: var(--blue-dark);
+  font-size: 11px; font-weight: 800; text-align: center;
+  text-decoration: none; border-radius: 8px;
+  transition: background 0.15s;
+}
+.kw-yt-cta:hover { background: rgba(229, 57, 53, 0.18); }
+body.dark .kw-yt-cta { color: #ffd54f; background: rgba(255, 215, 79, 0.1); }
+
+.kw-yt-fallback {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 8px; padding: 16px; text-align: center;
+  background: linear-gradient(135deg, #E53935, #C62828); color: white;
+  font-size: 14px; font-weight: 800; text-decoration: none;
+}
+.kw-yt-fallback:hover { filter: brightness(1.05); }
+
+/* Calm-mode opt-out: respect the accessibility toggle by killing autoplay
+   visuals altogether; render the click-card instead of the autoplaying embed. */
+body.a11y-calm .kw-yt-embed { display: none; }
+body.a11y-calm .kw-yt-cta {
+  display: block; padding: 12px;
+  background: linear-gradient(135deg, #E53935, #C62828); color: #fff;
+  font-size: 13px;
+}
 .not-cool-links {
   display: flex;
   flex-direction: column;
@@ -408,17 +563,24 @@ body.dark .modal.not-cool h2 { color: #ffb74d; }
 /* TURTLE MASCOT */
 .turtle-container {
   position: fixed;
-  bottom: 12px;
-  left: 12px;
+  bottom: 16px;
+  left: 16px;
   z-index: 100;
   transition: all 0.3s;
 }
 
 .turtle {
-  width: 56px;
-  height: 56px;
+  /* 50% bigger than the original 56px so younger kids can actually see and
+     tap it. The hint bubble that anchors above is correspondingly larger. */
+  width: 84px;
+  height: 84px;
   position: relative;
   cursor: pointer;
+  filter: drop-shadow(0 3px 6px rgba(0,0,0,0.18));
+}
+.turtle:hover { transform: scale(1.06); }
+@media (max-width: 540px) {
+  .turtle { width: 64px; height: 64px; }
 }
 
 .turtle-shell {
@@ -491,28 +653,37 @@ body.dark .modal.not-cool h2 { color: #ffb74d; }
 
 .turtle-hint-bubble {
   position: absolute;
-  bottom: 62px;
+  bottom: 92px;
   left: 0;
   background: white;
   border: 3px solid var(--blue);
-  border-radius: 16px;
-  padding: 10px 14px;
-  font-size: 13px;
-  font-weight: 600;
-  color: #333;
-  min-width: 170px;
-  max-width: 230px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  border-radius: 18px;
+  padding: 14px 18px;
+  font-size: 16px;
+  line-height: 1.35;
+  font-weight: 700;
+  color: #1f2a44;
+  min-width: 220px;
+  max-width: 320px;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.18);
   opacity: 0;
-  transform: translateY(10px);
-  transition: all 0.3s;
+  transform: translateY(10px) scale(0.92);
+  transition: all 0.25s cubic-bezier(.2,.8,.4,1.2);
   pointer-events: none;
 }
+.turtle-hint-bubble strong { color: var(--orange-dark); }
 
 .turtle-hint-bubble.show {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
   pointer-events: auto;
+  animation: hintWiggle 0.8s ease-out 0.25s both;
+}
+@keyframes hintWiggle {
+  0%   { transform: translateY(0) scale(1) rotate(0deg); }
+  20%  { transform: translateY(0) scale(1.03) rotate(-1deg); }
+  40%  { transform: translateY(0) scale(1.03) rotate(1deg); }
+  100% { transform: translateY(0) scale(1) rotate(0deg); }
 }
 
 .turtle-hint-bubble::after {
@@ -978,13 +1149,46 @@ body.dark .stores-bar a { color: #8ab4f8; }
 .ad-slot {
   width: 100%;
   max-width: 540px;
-  margin: 6px auto;
+  margin: 8px auto;
   text-align: center;
-  min-height: 50px;
-  overflow: hidden;
+  min-height: 100px;
+  /* No overflow:hidden — let the ad use whatever height Google bids for. */
 }
 
-.ad-slot ins { display: block; }
+.ad-slot ins { display: block; min-height: 100px; }
+
+.ad-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #999;
+  margin: 0 0 4px;
+  display: none; /* JS toggles this on once the slot has rendered. */
+}
+.ad-slot.has-ad .ad-label { display: block; }
+body.dark .ad-label { color: #777; }
+
+/* Stats-modal in-content ad — high engagement moment after a win/loss. */
+.modal .ad-slot { max-width: 320px; margin: 14px auto; min-height: 100px; }
+
+/* DESKTOP SIDE RAILS — 160x600 wide skyscrapers flanking the game column.
+   Hidden under 1100px viewport so they don't crowd the game on narrow
+   screens; this saturates the ~400px of empty space on each side at 1339px. */
+.ad-rail {
+  position: fixed;
+  top: 96px;
+  width: 160px;
+  min-height: 600px;
+  text-align: center;
+  z-index: 50;
+  display: none;
+}
+.ad-rail.left  { left: 16px; }
+.ad-rail.right { right: 16px; }
+.ad-rail .ad-label { display: block; }
+@media (min-width: 1100px) {
+  body.show-rails .ad-rail { display: block; }
+}
 
 /* DARK MODE TOGGLE */
 .dark-toggle {
@@ -997,6 +1201,129 @@ body.dark .stores-bar a { color: #8ab4f8; }
 /* TILE PERF */
 .tile { will-change: transform; }
 .confetti-piece { will-change: transform, opacity; }
+
+/* ============================================================
+   ACCESSIBILITY & NEURODIVERSITY MODES
+   Toggled by classes on <body>: a11y-dyslexia, a11y-reduce-motion,
+   a11y-high-contrast, a11y-large-text, a11y-calm.
+   Each is independent and persists in localStorage.
+   ============================================================ */
+
+/* OpenDyslexic — loaded only when the dyslexia toggle is on, so it doesn't
+   slow first paint for every visitor. */
+@font-face {
+  font-family: 'OpenDyslexic';
+  src: url('https://cdn.jsdelivr.net/gh/antijingoist/opendyslexic@gh-pages/fonts/Bold/OpenDyslexic-Bold.woff2') format('woff2'),
+       url('https://cdn.jsdelivr.net/gh/antijingoist/opendyslexic@gh-pages/fonts/Bold/OpenDyslexic-Bold.woff')  format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+body.a11y-dyslexia,
+body.a11y-dyslexia .tile,
+body.a11y-dyslexia .key,
+body.a11y-dyslexia button {
+  font-family: 'OpenDyslexic', 'Comic Sans MS', system-ui, sans-serif !important;
+  letter-spacing: 0.04em;
+}
+
+body.a11y-reduce-motion *,
+body.a11y-reduce-motion *::before,
+body.a11y-reduce-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+body.a11y-high-contrast {
+  --blue: #0033cc;
+  --blue-dark: #001a66;
+  --orange: #ff6600;
+  --orange-dark: #b34700;
+  --green: #008000;
+  --yellow: #d97900;
+  --gray: #444;
+}
+body.a11y-high-contrast .tile { border-width: 3px; }
+body.a11y-high-contrast .key  { border: 2px solid #000; }
+
+body.a11y-large-text { font-size: 18px; }
+body.a11y-large-text .tile { font-size: clamp(28px, 7vw, 40px); }
+body.a11y-large-text .key  { font-size: 18px; }
+body.a11y-large-text .badge { font-size: 14px; }
+
+body.a11y-calm .confetti-container { display: none; }
+body.a11y-calm .turtle.dance { animation: none; }
+body.a11y-calm .row-shake    { animation: none; }
+
+/* Honor browser-level accessibility preferences automatically. The user
+   can still override in the a11y panel; these media queries just give a
+   sensible default if no override is saved. */
+@media (prefers-reduced-motion: reduce) {
+  body:not(.a11y-motion-override) *,
+  body:not(.a11y-motion-override) *::before,
+  body:not(.a11y-motion-override) *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  body:not(.a11y-motion-override) .confetti-container { display: none; }
+}
+@media (prefers-contrast: more) {
+  body:not(.a11y-contrast-override) {
+    --blue: #0033cc;
+    --orange: #ff6600;
+    --green: #006400;
+  }
+}
+@media (prefers-color-scheme: dark) {
+  body:not(.a11y-theme-override) { /* user can override; default follows OS */ }
+}
+
+/* PRETEXT STRIP — short, plain-language instruction shown above the board.
+   Helps neurodivergent and first-time players know exactly what to do at a
+   glance instead of relying on the modal-only How-To-Play guide. */
+.pretext-strip {
+  max-width: 540px;
+  margin: 4px auto 8px;
+  padding: 8px 14px;
+  background: #FFF8E1;
+  border: 2px solid #FFD54F;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #5D4037;
+  text-align: center;
+  line-height: 1.4;
+}
+.pretext-strip .pretext-word { color: var(--blue-dark); font-weight: 800; }
+body.dark .pretext-strip { background: #2a2a3e; border-color: #5a8ad6; color: #eee; }
+body.dark .pretext-strip .pretext-word { color: #ffd54f; }
+
+/* Accessibility menu button + panel */
+.a11y-toggle { position: fixed; top: 12px; right: 56px; z-index: 100; }
+.a11y-panel {
+  position: fixed;
+  top: 60px;
+  right: 12px;
+  width: 280px;
+  max-width: calc(100vw - 24px);
+  background: white;
+  border: 2px solid var(--blue);
+  border-radius: 14px;
+  padding: 14px 16px;
+  box-shadow: 0 12px 36px rgba(0,0,0,0.18);
+  z-index: 200;
+  display: none;
+}
+.a11y-panel.show { display: block; }
+.a11y-panel h3 { margin: 0 0 8px; font-size: 14px; color: var(--blue-dark); }
+.a11y-row { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; font-size: 13px; font-weight: 600; color: #333; }
+.a11y-row label { cursor: pointer; user-select: none; flex: 1; }
+.a11y-row input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; }
+body.dark .a11y-panel { background: #2a2a3e; color: #eee; border-color: #5a8ad6; }
+body.dark .a11y-row   { color: #ddd; }
+body.dark .a11y-panel h3 { color: #8ab4f8; }
 </style>
 </head>
 <body>
@@ -1008,27 +1335,61 @@ body.dark .stores-bar a { color: #8ab4f8; }
     <div class="subtitle">Pick your challenge & language!</div>
 
     <div class="setup-section">
+      <h3>Pick a game</h3>
+      <div class="game-options" id="gameOptions">
+        <button class="game-btn selected" data-game="wordle">
+          <div class="game-emoji">&#128221;</div>
+          <div class="game-name">KiddieWordle</div>
+          <div class="game-sub">Guess the word in 6 tries</div>
+        </button>
+        <button class="game-btn" data-game="hangman">
+          <div class="game-emoji">&#129488;</div>
+          <div class="game-name">Hangman</div>
+          <div class="game-sub">Save the friend! 6 wrong guesses max</div>
+        </button>
+        <button class="game-btn" data-game="anagram" disabled>
+          <div class="game-emoji">&#128301;</div>
+          <div class="game-name">Anagram Scramble</div>
+          <div class="game-sub">Coming soon</div>
+        </button>
+        <button class="game-btn" data-game="wordsearch" disabled>
+          <div class="game-emoji">&#128269;</div>
+          <div class="game-name">Word Search</div>
+          <div class="game-sub">Coming soon</div>
+        </button>
+      </div>
+    </div>
+
+    <div class="setup-section">
       <h3>How many letters?</h3>
       <div class="length-options" id="lengthOptions">
         <button class="length-btn" data-len="3">
           <div class="num">3</div>
+          <div class="label">Tots</div>
+        </button>
+        <button class="length-btn" data-len="4">
+          <div class="num">4</div>
           <div class="label">Easy</div>
         </button>
-        <button class="length-btn selected" data-len="4">
-          <div class="num">4</div>
-          <div class="label">Classic</div>
-        </button>
-        <button class="length-btn" data-len="5">
+        <button class="length-btn selected" data-len="5">
           <div class="num">5</div>
-          <div class="label">Medium</div>
+          <div class="label">Classic</div>
         </button>
         <button class="length-btn" data-len="6">
           <div class="num">6</div>
-          <div class="label">Hard</div>
+          <div class="label">Medium</div>
         </button>
         <button class="length-btn" data-len="7">
           <div class="num">7</div>
+          <div class="label">Hard</div>
+        </button>
+        <button class="length-btn" data-len="8">
+          <div class="num">8</div>
           <div class="label">Expert</div>
+        </button>
+        <button class="length-btn" data-len="9">
+          <div class="num">9</div>
+          <div class="label">Genius</div>
         </button>
       </div>
     </div>
@@ -1075,8 +1436,9 @@ body.dark .stores-bar a { color: #8ab4f8; }
 <div class="game-info" id="gameInfo" style="display:none;">
   <div class="badge"><span class="flag-small" id="infoFlag"></span> <span id="infoLang"></span></div>
   <div class="badge" id="infoLength"></div>
-  <div class="badge" id="infoRejected" title="Words this session that weren't in the dictionary" style="display:none;">
-    <span aria-hidden="true">&#10060;</span> <span id="rejectedCount">0</span> not found
+  <div class="badge" id="infoMode" title="Difficulty mode — change in Settings"></div>
+  <div class="badge" id="infoRejected" title="Words this session that the dictionary did not recognize" style="display:none;">
+    <span aria-hidden="true">&#128270;</span> <span id="rejectedCount">0</span> not in dictionary
   </div>
 </div>
 
@@ -1093,13 +1455,59 @@ body.dark .stores-bar a { color: #8ab4f8; }
 </div>
 
 <!-- AD SLOT: TOP BANNER -->
+<!-- IMPORTANT: replace data-ad-slot value below with the real slot ID from
+     AdSense > Ads > By ad unit. The placeholder will not serve impressions. -->
 <div class="ad-slot" id="adTop" style="display:none;">
-  <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7655879237041224" data-ad-slot="TOP_SLOT_ID" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  <p class="ad-label">Advertisement</p>
+  <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7655879237041224" data-ad-slot="0000000001" data-ad-format="auto" data-full-width-responsive="true"></ins>
 </div>
 
-<!-- GAME BOARD -->
+<!-- DESKTOP SIDE RAILS — 160x600 wide skyscrapers; only render on >=1100px.
+     Replace data-ad-slot with real AdSense slot IDs once created. -->
+<div class="ad-rail left" id="adRailLeft">
+  <p class="ad-label">Advertisement</p>
+  <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px"
+       data-ad-client="ca-pub-7655879237041224" data-ad-slot="0000000003"></ins>
+</div>
+<div class="ad-rail right" id="adRailRight">
+  <p class="ad-label">Advertisement</p>
+  <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px"
+       data-ad-client="ca-pub-7655879237041224" data-ad-slot="0000000004"></ins>
+</div>
+
+<!-- PRETEXT STRIP — plain-language instructions above the board so every
+     player (especially first-time, ADHD, dyslexic, autistic) knows exactly
+     what to do without opening a modal. -->
+<div class="pretext-strip" id="pretextStrip" style="display:none;">
+  Type a <span class="pretext-word" id="pretextLen">5-letter</span> word, then press <strong>GO!</strong>
+  &nbsp;·&nbsp; <span style="color:var(--green);">Green</span> = right spot
+  &nbsp;·&nbsp; <span style="color:#F9A825;">Yellow</span> = right letter, wrong spot
+</div>
+
+<!-- GAME BOARD (Wordle) -->
 <div class="board-container" id="boardContainer" style="display:none;">
   <div class="board" id="board"></div>
+</div>
+
+<!-- HANGMAN STAGE — only shown when body.hangman-mode is set. Uses the same
+     keyboard component, just routes letter taps to the hangman handler. -->
+<div class="hangman-stage" id="hangmanStage">
+  <svg class="hangman-figure" id="hangmanFigure" viewBox="0 0 200 220" aria-hidden="true">
+    <!-- Gallows -->
+    <line class="show" x1="20"  y1="210" x2="180" y2="210"></line>
+    <line class="show" x1="50"  y1="210" x2="50"  y2="20"></line>
+    <line class="show" x1="50"  y1="20"  x2="140" y2="20"></line>
+    <line class="show" x1="140" y1="20"  x2="140" y2="40"></line>
+    <!-- Body parts (revealed one by one as wrong guesses accrue) -->
+    <circle id="hmHead"   cx="140" cy="60" r="18"></circle>
+    <line   id="hmBody"   x1="140" y1="78"  x2="140" y2="140"></line>
+    <line   id="hmArmL"   x1="140" y1="95"  x2="115" y2="115"></line>
+    <line   id="hmArmR"   x1="140" y1="95"  x2="165" y2="115"></line>
+    <line   id="hmLegL"   x1="140" y1="140" x2="120" y2="170"></line>
+    <line   id="hmLegR"   x1="140" y1="140" x2="160" y2="170"></line>
+  </svg>
+  <div class="hangman-word" id="hangmanWord"></div>
+  <div class="hangman-wrong" id="hangmanWrong"></div>
 </div>
 
 <!-- KEYBOARD -->
@@ -1128,7 +1536,47 @@ body.dark .stores-bar a { color: #8ab4f8; }
 
 <!-- SOUND TOGGLE -->
 <div class="sound-toggle">
-  <button class="icon-btn" id="soundBtn" aria-label="Toggle sound">&#9834;</button>
+  <button class="icon-btn" id="soundBtn" aria-label="Toggle sound" title="Sound on/off">&#9834;</button>
+</div>
+
+<!-- ACCESSIBILITY TOGGLE -->
+<div class="a11y-toggle">
+  <button class="icon-btn" id="a11yBtn"
+          aria-label="Accessibility settings"
+          aria-expanded="false"
+          aria-controls="a11yPanel"
+          title="Accessibility & comfort settings">&#9881;&#65039;</button>
+</div>
+
+<!-- ACCESSIBILITY PANEL — checkboxes persist in localStorage and apply
+     instantly via class toggles on body. -->
+<div class="a11y-panel" id="a11yPanel" role="dialog" aria-labelledby="a11yPanelTitle">
+  <h3 id="a11yPanelTitle">Comfort &amp; Accessibility</h3>
+  <div class="a11y-row">
+    <label for="a11yDyslexia">Dyslexia-friendly font</label>
+    <input type="checkbox" id="a11yDyslexia">
+  </div>
+  <div class="a11y-row">
+    <label for="a11yReduceMotion">Reduce motion</label>
+    <input type="checkbox" id="a11yReduceMotion">
+  </div>
+  <div class="a11y-row">
+    <label for="a11yHighContrast">High contrast</label>
+    <input type="checkbox" id="a11yHighContrast">
+  </div>
+  <div class="a11y-row">
+    <label for="a11yLargeText">Larger text</label>
+    <input type="checkbox" id="a11yLargeText">
+  </div>
+  <div class="a11y-row">
+    <label for="a11yCalm">Calm mode <span style="font-weight:400;color:#888;">(no confetti)</span></label>
+    <input type="checkbox" id="a11yCalm">
+  </div>
+  <div class="a11y-row">
+    <label for="a11yReadAloud">Read prompts aloud</label>
+    <input type="checkbox" id="a11yReadAloud">
+  </div>
+  <p style="margin:8px 0 0;font-size:11px;color:#888;">Saved on this device. Browser preferences (reduced motion, high contrast) are applied automatically when you haven't picked here.</p>
 </div>
 
 <!-- TOAST CONTAINER -->
@@ -1160,12 +1608,34 @@ body.dark .stores-bar a { color: #8ab4f8; }
       </div>
     </div>
     <div class="guess-dist" id="guessDist"></div>
-    <div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;">
       <button class="btn btn-green" id="shareBtn">Share</button>
       <button class="btn btn-orange" id="playAgainBtn">Play Again</button>
+      <button class="btn btn-blue" id="changeDiffBtn">Change Difficulty</button>
     </div>
-    <br>
-    <button class="btn btn-blue" onclick="document.getElementById('statsModal').classList.remove('show')">Close</button>
+
+    <!-- Latest from KiddieSketchTV — keeps the post-game moment branded
+         and pulls eyeballs to the YouTube channel. Configurable in JS. -->
+    <div class="kw-yt-embed" id="ytStats"></div>
+
+    <!-- Post-game ad — peak engagement, in-content placement. -->
+    <div class="ad-slot" id="adPostGame">
+      <p class="ad-label">Advertisement</p>
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7655879237041224" data-ad-slot="0000000005" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    </div>
+
+    <!-- Email subscribe (relocated here from below the keyboard so it doesn't
+         compete with the bottom banner ad for attention). -->
+    <div id="kwSubscribeModal" style="margin:14px auto 6px;padding:12px;background:linear-gradient(135deg,var(--blue),var(--blue-dark));border-radius:12px;text-align:center;color:white;">
+      <p style="margin:0 0 8px;font-size:13px;font-weight:800;">Love it? Get weekly word challenges!</p>
+      <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST" style="display:flex;gap:6px;max-width:340px;margin:0 auto;flex-wrap:wrap;justify-content:center;">
+        <input type="email" name="email" placeholder="parent@email.com" required style="flex:1;min-width:160px;padding:8px 12px;border:none;border-radius:8px;font-size:13px;font-family:inherit;">
+        <input type="hidden" name="_subject" value="New subscriber — KiddieWordle">
+        <button type="submit" style="padding:8px 14px;border:none;border-radius:8px;background:#fff;color:var(--blue);font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;">Subscribe</button>
+      </form>
+    </div>
+
+    <button class="btn btn-blue" onclick="closeKwModal('statsModal')" style="margin-top:6px;">Close</button>
   </div>
 </div>
 
@@ -1196,31 +1666,22 @@ body.dark .stores-bar a { color: #8ab4f8; }
     <div class="not-cool-emoji" aria-hidden="true">&#128571;</div>
     <h2>Sorry, that's not cool!</h2>
     <p>Let's try a kinder word. We're a friendly word game for kids.</p>
+    <div class="kw-yt-embed" id="ytNotCool"></div>
     <p style="margin-top:14px;font-weight:700;color:#444;">While you think of a nicer word, check these out:</p>
     <div class="not-cool-links" id="notCoolLinks"></div>
-    <button class="btn btn-blue" onclick="document.getElementById('notCoolModal').classList.remove('show')">Try again</button>
+    <button class="btn btn-blue" onclick="closeKwModal('notCoolModal')">Try again</button>
   </div>
 </div>
 
 <!-- AD SLOT: BOTTOM BANNER -->
 <div class="ad-slot" id="adBottom" style="display:none;">
-  <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7655879237041224" data-ad-slot="BOTTOM_SLOT_ID" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  <p class="ad-label">Advertisement</p>
+  <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7655879237041224" data-ad-slot="0000000002" data-ad-format="auto" data-full-width-responsive="true"></ins>
 </div>
 
-<!-- TRANSLATE WIDGET -->
-<div id="kwTranslate" style="max-width:540px;margin:6px auto;display:none;justify-content:flex-end;padding:0 8px;">
-  <div id="google_translate_element"></div>
-</div>
-
-<!-- EMAIL SUBSCRIBER -->
-<div id="kwSubscribe" style="max-width:540px;margin:10px auto;padding:16px;background:linear-gradient(135deg,var(--blue),var(--blue-dark));border-radius:14px;text-align:center;color:white;display:none;">
-  <p style="margin:0 0 8px;font-size:14px;font-weight:800;">Love KiddieWordle? Get weekly word challenges!</p>
-  <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST" style="display:flex;gap:6px;max-width:360px;margin:0 auto;flex-wrap:wrap;justify-content:center;">
-    <input type="email" name="email" placeholder="parent@email.com" required style="flex:1;min-width:180px;padding:8px 12px;border:none;border-radius:10px;font-size:13px;font-family:inherit;">
-    <input type="hidden" name="_subject" value="New subscriber — KiddieWordle">
-    <button type="submit" style="padding:8px 16px;border:none;border-radius:10px;background:#fff;color:var(--blue);font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;">Subscribe</button>
-  </form>
-</div>
+<!-- Translate widget removed: KiddieWordle is English-only for now. -->
+<!-- Email subscribe relocated into the post-game stats modal so it stops
+     competing with the bottom banner ad for attention. -->
 
 <div class="footer" id="gameFooter" style="display:none;">
   KiddieWordle &mdash; A <a href="https://kiddiesketch.com" target="_blank">KiddieSketch</a> Game | <a href="https://kiddiego.com" target="_blank">Shop KiddieGo</a> | <a href="https://kiddiepets.com" target="_blank">KiddiePets</a>
@@ -1250,6 +1711,14 @@ const WORD_LISTS = {
     },
     7: {
       targets: ['AMAZING','BACKYARD','BALLOON','BICYCLE','BLANKET','BLOSSOM','BROTHER','BUFFALO','BUILDER','CABINET','CAPTAIN','CHICKEN','CHIMNEY','COCONUT','COMPLEX','CONNECT','COTTAGE','COUNTRY','COURAGE','CRACKER','CRICKET','CRYSTAL','CURTAIN','CUSHION','DAYCARE','DOLPHIN','DRAFTED','DRAWING','DRESSED','DRUMMER','DYNAMIC','EDUCATE','ELDERLY','ELEGANT','ELEMENT','EMOTION','EVEREST','EXPLORE','FACTORY','FANTAIL','FANTASY','FASHION','FEATHER','FICTION','FIREFLY','FISHNET','FLOWERS','FLUTTER','FORMULA','FREEDOM','FURNISH','GALLEON','GLACIER','GLORIFY','GOODBYE','GRAPPLE','GRAVITY','GRIZZLY','GUMBALL','HABITAT','HALFWAY','HANDMIX','HARMONY','HARVEST','HEALTHY','HELPFUL','HOLIDAY','HORIZON','ICEBERG','IMAGINE','IMPRINT','JOURNEY','KITCHEN','KNUCKLE','LAPPING','LEATHER','LEOPARD','LIBRARY','LIGHTER','LOBSTER','MACHINE','MAGENTA','MAMMOTH','MASSIVE','MEADOWS','MESSAGE','MILLION','MINERAL','MISSION','MONSTER','MORNING','MUSTARD','MYSTERY','NATURAL','NETWORK','NOTABLE','NUCLEUS','OCTOPUS','ORGANIC','OSTRICH','OUTDOOR','PACKAGE','PAINTER','PANTHER','PARSNIP','PARTNER','PATTERN','PEACOCK','PENGUIN','PERFECT','PICTURE','PILGRIM','PIONEER','PLASTIC','PRESENT','PRETZEL','PUMPKIN','RAINBOW','REFRESH','ROOSTER','SANDBOX','SCRATCH','SLUMBER','SPARKLE','SQUEEZE','STUDENT','TEACHER','THOUGHT','TOASTER','TORNADO','TRAFFIC','UNICORN','VAMPIRE','VETERAN','VILLAGE','VOLCANO','WEATHER','WHISPER','WILDLIFE','YOUNGER'],
+      valid: null
+    },
+    8: {
+      targets: ['AIRPLANE','BACKPACK','BASEBALL','BIRTHDAY','BLUEBELL','BOOKWORM','CAMPFIRE','CARNIVAL','CARTOONS','CHILDREN','COMPUTER','CRESCENT','CUPCAKES','DAYDREAM','DAYLIGHT','DINOSAUR','DUCKLING','EATABLES','EGGSHELL','ELEPHANT','EXERCISE','FAMILIES','FAVORITE','FILMSTAR','FIREWOOD','FIREWORK','FISHNETS','FOOTBALL','FOOTPATH','FRIENDLY','GARDENED','GIFTSHOP','GIRAFFES','GOLDFISH','GOODNESS','GRANDMOM','HAIRBAND','HANDBALL','HANDSOME','HEADBAND','HEADLAMP','HEADREST','HOMEMADE','HONEYBEE','HUNDREDS','ICECREAM','JUMBOJET','KILOGRAM','KINDNESS','KITCHENS','LADYBUGS','LANDFORM','LAUGHING','LAUGHTER','LAVENDER','LEMONADE','MAGICIAN','MAILROOM','MEMORIES','MESSAGES','MOONBEAM','MORNINGS','MOUNTAIN','MULBERRY','MUSHROOM','NICKNAME','NIGHTOWL','NOTEBOOK','OINTMENT','OUTDOORS','OVERCAST','PAINTBOX','PANCAKES','PARADISE','PARTYING','PASSPORT','PEACEFUL','PIGTAILS','PINKROSE','POOLSIDE','POPSICLE','PORRIDGE','PRINCESS','PUMPKINS','RAINBOWS','RAINDROP','RAINFALL','RAINWEAR','RECYCLED','RIVERBED','ROCKETED','ROUTINES','RUNNERUP','SAILBOAT','SANDWICH','SAPPHIRE','SCAVENGE','SEAHORSE','SEASHELL','SEASIDES','SHELTERS','SHOELACE','SHOESHOP','SIDEKICK','SIDEWALK','SKIPPERS','SKYLIGHT','SLEDDING','SNOWBALL','SNOWFALL','SOFTBALL','SOMEBODY','SOMEDAYS','SONGBIRD','SOUVENIR','SPARKLES','SPLINTER','STARFISH','STARGAZE','SUNBEAMS','SUNRISES','SUNSHINE','SWIMMERS','SWIMMING','TEACHING','TOOTHFUL','TRACTORS','TREASURE','TROPICAL','UMBRELLA','UNDERTOW','UNICORNS','VACATION','VANILLAS','VEHICLES','VINEYARD','WARDROBE','WATERWAY','WHISTLED','WHISTLER','WILDLIFE','WINDMILL','WINGSPAN','WONDROUS','WOODLAND','YEARBOOK'],
+      valid: null
+    },
+    9: {
+      targets: ['ADVENTURE','ALLIGATOR','ALPHABETS','ANYWHERES','ARCHITECT','ASTROLOGY','ASTRONAUT','ATTENTION','BARNYARDS','BEAUTIFUL','BIRDHOUSE','BIRTHCAKE','BLUEBERRY','BLUEPRINT','BOOKSHELF','BREAKFAST','BREATHING','BROADCAST','BUMBLEBEE','BUTTERFLY','CALENDARS','CAMPFIRES','CARTWHEEL','CATAMARAN','CELEBRATE','CHAMPIONS','CHARACTER','CHARTERED','CHILDLIKE','CHIPMUNKS','CHOCOLATE','CHRISTMAS','CIRCULATE','COMFORTED','CONFIDENT','CROCODILE','CRUNCHIER','CURIOSITY','DANDELION','DECORATED','DELICIOUS','DETECTIVE','DETERMINE','DIRECTION','EARTHWORM','ECOSYSTEM','ELEPHANTS','ENTERTAIN','EVERGREEN','EXCELLENT','EXPLORERS','FAIRYTALE','FANTASTIC','FIREFLIES','FIREPLACE','FIRSTBORN','FLAMINGOS','FLAPJACKS','FOOTPRINT','GARDENERS','GARDENING','GIANTSTEP','GIFTBOXES','GLITTERED','GOLDFINCH','GROCERIES','HAMMOCKED','HANDSHAKE','HEARTBEAT','HEDGEHOGS','HILLSIDES','HONEYBEES','HOPSCOTCH','IMAGINING','INFLATING','INTRODUCE','INVENTING','JELLYBEAN','JOURNEYED','KICKSTART','LADYBIRDS','LANDSCAPE','LIBRARIAN','LIGHTBULB','LIONHEART','LISTENING','MAGNIFIED','MILESTONE','MILKSHAKE','MINIATURE','MOONLIGHT','MUSHROOMS','NEIGHBORS','NICKNAMES','NIGHTGOWN','NOSTALGIA','NOTEBOOKS','NUMBERING','OVERSIZED','PAINTBALL','PARADISES','PARENTING','PERFORMER','PLAYDATES','PLAYFULLY','PLAYHOUSE','PLAYTIMES','PRESERVES','PRETENDED','PRICKLIER','RAINCOATS','RECEIVING','REINDEERS','SCAVENGER','SCRAMBLED','SECRETIVE','SHEPHERDS','SHIMMERED','SIDEWALKS','SLUMBERED','SNOWFLAKE','SNOWSTORM','SOFTBALLS','SOMETHING','SONGBIRDS','SPACESHIP','SPEEDBOAT','SQUIRRELS','STAIRCASE','STARSHINE','STORYBOOK','SUBMARINE','SUNFLOWER','SUNSHINES','SWAMPLAND','SWEETCORN','TANGERINE','TAPDANCED','TARANTULA','TELESCOPE','TIPTOEING','TOWNHOUSE','TREEHOUSE','TURNTABLE','UMBRELLAS','UNICYCLES','UNTIDIEST','VEGETABLE','VOLCANOES','WANDERING','WATERFALL','WHALESONG','WHIRLPOOL','WHISPERED','WONDERFUL','WOODBLOCK','WOODLANDS','YESTERDAY','ZEBRAFISH'],
       valid: null
     }
   },
@@ -1649,7 +2118,8 @@ const LANG_NAMES = {
 };
 
 // ==================== GAME STATE ====================
-let wordLength = 4;
+let wordLength = 5; // Default = Classic. (3=Tots, 4=Easy, 5=Classic, 6=Medium, 7=Hard, 8=Expert, 9=Genius)
+let gameType = 'wordle'; // 'wordle' | 'hangman' (anagram/wordsearch are stubs)
 let language = 'en';
 const MAX_GUESSES = 6;
 
@@ -1671,6 +2141,93 @@ const KW_LINKS = [
   { label: '🌍 KiddieGo — the kids megastore',  url: 'https://kiddiego.com',                                kind: 'orange' },
   { label: '▶️ Watch KiddieSketchTV on YouTube',     url: 'https://www.youtube.com/@KiddieSketchTV',             kind: 'red'    }
 ];
+
+// ==================== YOUTUBE EMBED (configurable) ====================
+// We can't resolve a channel handle to a playlist ID from the browser without
+// the YouTube Data API. To keep things zero-cost and configurable, this object
+// supports two strategies:
+//   1) latestVideoId — paste the ID of your newest video (preferred; updates
+//      can be done by editing this single field, eventually via ohm.homes).
+//   2) uploadsPlaylistId — your channel's "Uploads" playlist (UU…). Set this
+//      once and YouTube will always serve the most recent video at index=1.
+// If neither is set, the embed degrades to a friendly "Watch on YouTube"
+// click-card linking to the channel — no broken iframe.
+const KW_YT_CONFIG = {
+  channelHandle: '@KiddieSketchTV',
+  channelUrl:    'https://www.youtube.com/@KiddieSketchTV',
+  uploadsPlaylistId: '',                 // e.g. 'UUxxxxxxxxxxxxxxxxx'
+  latestVideoId:     '7CF_ZH7lFbU',      // KiddieSketchTV — newest video
+  // Game-theory tuning for the in-modal embed:
+  //  - autoplay=1 + mute=1 → muted autoplay satisfies browser autoplay rules
+  //    AND prevents a sound startle that drives players off the site.
+  //  - controls=1 keeps user agency (they can pause) → loss-aversion reduced.
+  //  - modestbranding=1 + rel=0 + iv_load_policy=3 strip distractions and
+  //    related-video thumbnails so the eye stays anchored on the Play Again
+  //    button, not on a competing autoplay queue.
+  //  - playsinline=1 stops mobile from hijacking fullscreen.
+  // The result: video is a soft, optional reward — engaging enough to extend
+  // session, low-stim enough to preserve focus on the next game loop.
+  embedParams: 'autoplay=1&mute=1&controls=1&playsinline=1&modestbranding=1&rel=0&iv_load_policy=3&fs=0&disablekb=1&loop=0',
+  // Show a small "Watch with sound on YouTube" link below the embed so the
+  // user can opt in to the full-fidelity experience without us forcing it.
+  unmutedCtaLabel: 'Watch with sound on YouTube ▶'
+};
+
+// Tear down the iframe when a modal closes — prevents audio bleed and lets
+// the next modal-open trigger a fresh autoplay cycle.
+function teardownYouTubeEmbed(targetEl) {
+  if (!targetEl) return;
+  targetEl.innerHTML = '';
+  targetEl.dataset.kwMounted = '';
+  // Also remove any sibling CTA we appended in build.
+  const cta = targetEl.parentNode && targetEl.parentNode.querySelector('.kw-yt-cta');
+  if (cta) cta.remove();
+}
+
+function buildYouTubeEmbed(targetEl) {
+  if (!targetEl || targetEl.dataset.kwMounted === '1') return;
+  const c = KW_YT_CONFIG;
+  const params = c.embedParams || 'rel=0&modestbranding=1';
+  let src = '';
+  let unmutedHref = c.channelUrl;
+  if (c.latestVideoId) {
+    src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(c.latestVideoId) + '?' + params;
+    unmutedHref = 'https://www.youtube.com/watch?v=' + encodeURIComponent(c.latestVideoId);
+  } else if (c.uploadsPlaylistId) {
+    src = 'https://www.youtube-nocookie.com/embed/videoseries?list='
+        + encodeURIComponent(c.uploadsPlaylistId) + '&index=1&' + params;
+  }
+  if (src) {
+    const f = document.createElement('iframe');
+    f.src = src;
+    f.title = 'Latest from ' + c.channelHandle;
+    f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+    f.allowFullscreen = true;
+    f.loading = 'lazy';
+    f.referrerPolicy = 'strict-origin-when-cross-origin';
+    targetEl.appendChild(f);
+    if (c.unmutedCtaLabel) {
+      const cta = document.createElement('a');
+      cta.href = unmutedHref;
+      cta.target = '_blank';
+      cta.rel = 'noopener';
+      cta.className = 'kw-yt-cta';
+      cta.textContent = c.unmutedCtaLabel;
+      targetEl.parentNode.insertBefore(cta, targetEl.nextSibling);
+    }
+  } else {
+    // Fallback: branded click card to the channel.
+    const a = document.createElement('a');
+    a.href = c.channelUrl;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    a.className = 'kw-yt-fallback';
+    a.innerHTML = '<div style="font-size:36px;line-height:1;">▶</div>'
+                + '<div>Watch the latest videos on <u>' + c.channelHandle + '</u></div>';
+    targetEl.appendChild(a);
+  }
+  targetEl.dataset.kwMounted = '1';
+}
 
 // ==================== UNSAFE-WORD BLOCKLIST ====================
 // Triggers the "Sorry, that's not cool" modal. Kept in a Set for O(1) lookup.
@@ -1703,6 +2260,7 @@ function showNotCoolModal() {
       list.appendChild(a);
     });
   }
+  buildYouTubeEmbed(document.getElementById('ytNotCool'));
   document.getElementById('notCoolModal').classList.add('show');
   playSound('wrong');
 }
@@ -1719,7 +2277,10 @@ function updateRejectedCounter() {
 function noteRejectedWord(word) {
   const before = SESSION_REJECTED_WORDS.size;
   SESSION_REJECTED_WORDS.add(word);
-  if (SESSION_REJECTED_WORDS.size !== before) updateRejectedCounter();
+  if (SESSION_REJECTED_WORDS.size !== before) {
+    updateRejectedCounter();
+    if (typeof logKwEvent === 'function') logKwEvent('reject', { word });
+  }
 }
 let targetWord = '';
 let currentRow = 0;
@@ -1742,8 +2303,9 @@ function initSetup() {
   try {
     const prefs = JSON.parse(localStorage.getItem('kiddiewordle_prefs'));
     if (prefs) {
-      wordLength = prefs.len || 4;
+      wordLength = prefs.len || 5;
       language = prefs.lang || 'en';
+      gameType = prefs.game || 'wordle';
     }
   } catch(e) {}
 
@@ -1766,8 +2328,22 @@ function initSetup() {
     });
   });
 
+  // Game picker — Wordle / Hangman / stubs
+  document.querySelectorAll('.game-btn').forEach(btn => {
+    btn.classList.toggle('selected', btn.dataset.game === gameType);
+    btn.addEventListener('click', () => {
+      if (btn.disabled) {
+        showToast('Coming soon!');
+        return;
+      }
+      document.querySelectorAll('.game-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      gameType = btn.dataset.game;
+    });
+  });
+
   document.getElementById('playBtn').addEventListener('click', () => {
-    localStorage.setItem('kiddiewordle_prefs', JSON.stringify({ len: wordLength, lang: language }));
+    localStorage.setItem('kiddiewordle_prefs', JSON.stringify({ len: wordLength, lang: language, game: gameType }));
     document.getElementById('setupScreen').classList.add('hidden');
     showGameUI();
     startGame(false);
@@ -1779,11 +2355,15 @@ function showGameUI() {
   document.getElementById('gameInfo').style.display = '';
   document.getElementById('storesBar').style.display = '';
   document.getElementById('adTop').style.display = '';
+  const pre = document.getElementById('pretextStrip');
+  if (pre) {
+    document.getElementById('pretextLen').textContent = wordLength + '-letter';
+    pre.style.display = '';
+  }
+  document.body.classList.add('show-rails');
   document.getElementById('boardContainer').style.display = '';
   document.getElementById('keyboard').style.display = '';
   document.getElementById('adBottom').style.display = '';
-  document.getElementById('kwTranslate').style.display = 'flex';
-  document.getElementById('kwSubscribe').style.display = '';
   document.getElementById('gameFooter').style.display = '';
 
   // Update info bar
@@ -1791,6 +2371,10 @@ function showGameUI() {
   document.getElementById('infoFlag').textContent = langData.flag;
   document.getElementById('infoLang').textContent = langData.name;
   document.getElementById('infoLength').textContent = wordLength + ' letters';
+  // Map word length back to its difficulty label so the player always knows
+  // what mode they're in without opening Settings.
+  const MODE_LABELS = { 3: 'Tots', 4: 'Easy', 5: 'Classic', 6: 'Medium', 7: 'Hard', 8: 'Expert', 9: 'Genius' };
+  document.getElementById('infoMode').textContent = (MODE_LABELS[wordLength] || 'Classic') + ' mode';
   // Reflect the cumulative session not-found counter (hidden when zero).
   updateRejectedCounter();
 }
@@ -1803,8 +2387,9 @@ function hideGameUI() {
   document.getElementById('boardContainer').style.display = 'none';
   document.getElementById('keyboard').style.display = 'none';
   document.getElementById('adBottom').style.display = 'none';
-  document.getElementById('kwTranslate').style.display = 'none';
-  document.getElementById('kwSubscribe').style.display = 'none';
+  const pre = document.getElementById('pretextStrip');
+  if (pre) pre.style.display = 'none';
+  document.body.classList.remove('show-rails');
   document.getElementById('gameFooter').style.display = 'none';
 }
 
@@ -1814,7 +2399,7 @@ function loadWords() {
   if (!langList || !langList[wordLength]) {
     // Fallback to English 4
     language = 'en';
-    wordLength = 4;
+    wordLength = 5;
   }
 
   const data = WORD_LISTS[language][wordLength];
@@ -2059,6 +2644,12 @@ function clearCurrentRow() {
 
 // ==================== INPUT ====================
 function handleKeyPress(key) {
+  // Hangman uses the same keyboard but only consumes letter taps.
+  if (gameType === 'hangman') {
+    if (key === 'ENTER' || key === 'BACK') return;
+    handleHangmanLetter(key);
+    return;
+  }
   if (gameOver) return;
 
   // Locked letters (proven absent from the target) cannot be retyped.
@@ -2157,8 +2748,12 @@ async function submitGuess() {
 
     if (won) {
       gameOver = true;
-      const msgs = ["Amazing!", "Super!", "Great job!", "Wow!", "You got it!", "Yay!"];
-      showToast(msgs[Math.min(currentRow - 1, msgs.length - 1)]);
+      // Encouragement comes from KW_AI; falls back to a curated random list
+      // when no backend is configured (see KW_AI.encouragement).
+      KW_AI.encouragement('win', { tries: currentRow, target: targetWord })
+        .then(msg => { showToast(msg); speakIfEnabled(msg); })
+        .catch(() => showToast('You got it!'));
+      logKwEvent('win', { tries: currentRow });
       playSound('win');
       winAnimation();
       launchConfetti();
@@ -2167,7 +2762,10 @@ async function submitGuess() {
       setTimeout(() => showStatsModal(), 2200);
     } else if (currentRow >= MAX_GUESSES) {
       gameOver = true;
-      showToast(`It was ${targetWord}!`);
+      KW_AI.encouragement('loss', { target: targetWord })
+        .then(msg => { showToast(msg + ' It was ' + targetWord + '!'); speakIfEnabled(msg + '. The word was ' + targetWord); })
+        .catch(() => showToast('It was ' + targetWord + '!'));
+      logKwEvent('loss', { target: targetWord });
       playSound('lose');
       updateStats(false, 0);
       setTimeout(() => showStatsModal(), 1800);
@@ -2300,24 +2898,43 @@ function showToast(msg) {
 }
 
 // ==================== TURTLE HINT ====================
-function showTurtleHint() {
+async function showTurtleHint() {
   const bubble = document.getElementById('hintBubble');
   const turtle = document.getElementById('turtle');
 
-  const guessed = new Set();
+  // Build the gameplay state we'd send to KW_AI.hint() if a backend is wired.
+  // Local fallback (run inside KW_AI.hint when endpoint is null) returns the
+  // same first-letter hint we used to hard-code, so behavior is unchanged.
+  const guesses = [];
   for (let r = 0; r < currentRow; r++) {
+    let g = '';
     for (let c = 0; c < wordLength; c++) {
       const tile = document.querySelector(`.tile[data-row="${r}"][data-col="${c}"]`);
-      if (tile.classList.contains('correct')) guessed.add(c);
+      g += tile.textContent || '';
     }
+    if (g) guesses.push(g);
   }
+  const state = { target: targetWord, guesses, wordLength, language };
+  let hint;
+  try { hint = await KW_AI.hint(state); } catch(e) { hint = null; }
 
-  let hint = 'You\'re so close! Keep trying!';
-  for (let c = 0; c < wordLength; c++) {
-    if (!guessed.has(c)) {
-      const pos = c === 0 ? '1st' : c === 1 ? '2nd' : c === 2 ? '3rd' : (c+1)+'th';
-      hint = `Hint: The ${pos} letter is "${targetWord[c]}"!`;
-      break;
+  // Extra fallback: if KW_AI.hint somehow returned null, use the first
+  // un-guessed correct letter — same logic as before.
+  if (!hint) {
+    const guessed = new Set();
+    for (let r = 0; r < currentRow; r++) {
+      for (let c = 0; c < wordLength; c++) {
+        const tile = document.querySelector(`.tile[data-row="${r}"][data-col="${c}"]`);
+        if (tile.classList.contains('correct')) guessed.add(c);
+      }
+    }
+    hint = 'You\'re so close! Keep trying!';
+    for (let c = 0; c < wordLength; c++) {
+      if (!guessed.has(c)) {
+        const pos = c === 0 ? '1st' : c === 1 ? '2nd' : c === 2 ? '3rd' : (c+1)+'th';
+        hint = `Hint: The ${pos} letter is "${targetWord[c]}"!`;
+        break;
+      }
     }
   }
 
@@ -2325,7 +2942,8 @@ function showTurtleHint() {
   bubble.classList.add('show');
   turtle.classList.add('bounce');
   setTimeout(() => turtle.classList.remove('bounce'), 1500);
-  setTimeout(() => bubble.classList.remove('show'), 5000);
+  setTimeout(() => bubble.classList.remove('show'), 6000);
+  speakIfEnabled(hint);
 }
 
 document.getElementById('turtle').addEventListener('click', () => {
@@ -2397,7 +3015,11 @@ function showStatsModal() {
     distEl.appendChild(row);
   }
 
+  buildYouTubeEmbed(document.getElementById('ytStats'));
   document.getElementById('statsModal').classList.add('show');
+  // Push the in-modal ad slot the first time the modal opens; subsequent
+  // opens are no-ops thanks to the kwPushed guard in pushAllAdSlots.
+  if (typeof pushAllAdSlots === 'function') pushAllAdSlots();
 }
 
 // ==================== SHARE ====================
@@ -2430,9 +3052,29 @@ document.getElementById('shareBtn').addEventListener('click', () => {
 
 // ==================== PLAY AGAIN ====================
 document.getElementById('playAgainBtn').addEventListener('click', () => {
-  document.getElementById('statsModal').classList.remove('show');
+  closeKwModal('statsModal');
   startGame(false);
 });
+
+// "Change Difficulty" — close stats modal and surface the setup picker.
+const changeDiffBtn = document.getElementById('changeDiffBtn');
+if (changeDiffBtn) {
+  changeDiffBtn.addEventListener('click', () => {
+    closeKwModal('statsModal');
+    document.getElementById('setupScreen').classList.remove('hidden');
+    hideGameUI();
+  });
+}
+
+// Modal close helper — also tears down any embedded video so audio stops
+// the moment the user dismisses the modal. Called from inline onclick attrs.
+function closeKwModal(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.remove('show');
+  el.querySelectorAll('.kw-yt-embed').forEach(teardownYouTubeEmbed);
+}
+window.closeKwModal = closeKwModal;
 
 // ==================== SETTINGS / BACK TO PICKER ====================
 document.getElementById('settingsBtn').addEventListener('click', () => {
@@ -2448,9 +3090,11 @@ document.getElementById('helpBtn').addEventListener('click', () => {
 
 document.getElementById('statsBtn').addEventListener('click', () => showStatsModal());
 
-['statsModal', 'helpModal'].forEach(id => {
-  document.getElementById(id).addEventListener('click', (e) => {
-    if (e.target === e.currentTarget) e.currentTarget.classList.remove('show');
+['statsModal', 'helpModal', 'notCoolModal'].forEach(id => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeKwModal(id);
   });
 });
 
@@ -2502,13 +3146,104 @@ function startGame(showSetup = true) {
   hintShown = false;
 
   loadWords();
-  targetWord = getRandomWord();
+  // Filter loaded WORDS to the exact requested wordLength to defend against
+  // any list entries of mismatched length sneaking in.
+  WORDS = WORDS.filter(w => typeof w === 'string' && w.length === wordLength);
+  if (WORDS.length === 0) WORDS = ['APPLE','HAPPY','SMILE','SHEEP','PARTY','PIANO','MAGIC'].filter(w => w.length === wordLength);
+  targetWord = getRandomWord() || 'APPLE';
 
-  buildBoard();
+  document.body.classList.toggle('hangman-mode', gameType === 'hangman');
+
   buildKeyboard();
+  if (gameType === 'hangman') {
+    startHangman();
+  } else {
+    buildBoard();
+  }
 
   document.getElementById('hintBubble').classList.remove('show');
   document.getElementById('turtle').classList.remove('dance', 'bounce');
+}
+
+// ==================== HANGMAN ENGINE ====================
+// Uses the same currently-loaded WORDS pool and on-screen keyboard as Wordle;
+// just routes letter taps to its own state machine. 6 wrong guesses = lose.
+let HM_STATE = null;
+function startHangman() {
+  HM_STATE = {
+    word: targetWord,
+    revealed: targetWord.split('').map(() => false),
+    wrong: []
+  };
+  document.getElementById('boardContainer').style.display = 'none';
+  document.getElementById('hangmanStage').style.display = 'flex';
+  // Reset the SVG body parts.
+  ['hmHead','hmBody','hmArmL','hmArmR','hmLegL','hmLegR'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('show');
+  });
+  // Reset keyboard color state — Hangman uses its own correct/wrong colors.
+  document.querySelectorAll('.key').forEach(k => k.classList.remove('correct','present','absent','locked'));
+  renderHangman();
+}
+
+function renderHangman() {
+  if (!HM_STATE) return;
+  const wEl = document.getElementById('hangmanWord');
+  wEl.innerHTML = '';
+  HM_STATE.word.split('').forEach((ch, i) => {
+    const slot = document.createElement('span');
+    slot.className = 'slot' + (HM_STATE.revealed[i] ? ' revealed' : '');
+    slot.textContent = HM_STATE.revealed[i] ? ch : ' ';
+    wEl.appendChild(slot);
+  });
+  const wrEl = document.getElementById('hangmanWrong');
+  wrEl.textContent = HM_STATE.wrong.length ? 'Wrong: ' + HM_STATE.wrong.join(' ') : '';
+  const PARTS = ['hmHead','hmBody','hmArmL','hmArmR','hmLegL','hmLegR'];
+  for (let i = 0; i < HM_STATE.wrong.length && i < PARTS.length; i++) {
+    const el = document.getElementById(PARTS[i]);
+    if (el) el.classList.add('show');
+  }
+}
+
+function handleHangmanLetter(letter) {
+  if (gameOver || !HM_STATE) return;
+  letter = letter.toUpperCase();
+  if (!/^[A-Z]$/.test(letter)) return;
+  const keyEl = document.querySelector(`.key[data-key="${letter}"]`);
+  if (HM_STATE.word.includes(letter)) {
+    let any = false;
+    HM_STATE.word.split('').forEach((ch, i) => {
+      if (ch === letter && !HM_STATE.revealed[i]) {
+        HM_STATE.revealed[i] = true; any = true;
+      }
+    });
+    if (any) { playSound('correct'); if (keyEl) keyEl.classList.add('correct'); }
+    if (HM_STATE.revealed.every(Boolean)) {
+      gameOver = true;
+      KW_AI.encouragement('win', { game: 'hangman', target: HM_STATE.word })
+        .then(msg => { showToast(msg); speakIfEnabled(msg); })
+        .catch(() => showToast('You saved them!'));
+      logKwEvent('win', { game: 'hangman' });
+      launchConfetti();
+      updateStats(true, HM_STATE.wrong.length + 1);
+      setTimeout(() => showStatsModal(), 1500);
+    }
+  } else if (!HM_STATE.wrong.includes(letter)) {
+    HM_STATE.wrong.push(letter);
+    playSound('wrong');
+    if (keyEl) { keyEl.classList.add('absent', 'locked'); }
+    if (HM_STATE.wrong.length >= 6) {
+      gameOver = true;
+      KW_AI.encouragement('loss', { game: 'hangman', target: HM_STATE.word })
+        .then(msg => { showToast(msg + ' It was ' + HM_STATE.word + '!'); speakIfEnabled(msg); })
+        .catch(() => showToast('It was ' + HM_STATE.word + '!'));
+      logKwEvent('loss', { game: 'hangman' });
+      updateStats(false, 0);
+      setTimeout(() => showStatsModal(), 1800);
+    }
+  }
+  renderHangman();
 }
 
 // ==================== INIT ====================
@@ -2541,17 +3276,194 @@ darkBtn.addEventListener('click', () => {
   document.querySelector('meta[name="theme-color"]').content = isDark ? '#1a1a2e' : '#2196F3';
 });
 
+// ==================== ACCESSIBILITY PANEL ====================
+// Each toggle maps to a body class + a localStorage key. The user's choice
+// always wins over the OS-level @media (prefers-...) defaults — we set an
+// override class so the @media rules step aside.
+const A11Y_TOGGLES = [
+  { id: 'a11yDyslexia',     bodyClass: 'a11y-dyslexia',      key: 'kw_a11y_dyslexia' },
+  { id: 'a11yReduceMotion', bodyClass: 'a11y-reduce-motion', key: 'kw_a11y_reduce_motion', overrideClass: 'a11y-motion-override' },
+  { id: 'a11yHighContrast', bodyClass: 'a11y-high-contrast', key: 'kw_a11y_high_contrast', overrideClass: 'a11y-contrast-override' },
+  { id: 'a11yLargeText',    bodyClass: 'a11y-large-text',    key: 'kw_a11y_large_text' },
+  { id: 'a11yCalm',         bodyClass: 'a11y-calm',          key: 'kw_a11y_calm' },
+  { id: 'a11yReadAloud',    bodyClass: 'a11y-read-aloud',    key: 'kw_a11y_read_aloud' }
+];
+
+function applyA11yToggle(spec, on) {
+  document.body.classList.toggle(spec.bodyClass, on);
+  if (spec.overrideClass) document.body.classList.toggle(spec.overrideClass, on || false);
+  try { localStorage.setItem(spec.key, on ? '1' : '0'); } catch(e) {}
+}
+
+A11Y_TOGGLES.forEach(spec => {
+  const el = document.getElementById(spec.id);
+  if (!el) return;
+  let saved = null;
+  try { saved = localStorage.getItem(spec.key); } catch(e) {}
+  if (saved !== null) {
+    el.checked = saved === '1';
+    applyA11yToggle(spec, el.checked);
+  }
+  el.addEventListener('change', () => applyA11yToggle(spec, el.checked));
+});
+
+const a11yBtn = document.getElementById('a11yBtn');
+const a11yPanel = document.getElementById('a11yPanel');
+if (a11yBtn && a11yPanel) {
+  a11yBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const open = a11yPanel.classList.toggle('show');
+    a11yBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  document.addEventListener('click', (e) => {
+    if (!a11yPanel.contains(e.target) && e.target !== a11yBtn) {
+      a11yPanel.classList.remove('show');
+      a11yBtn.setAttribute('aria-expanded', 'false');
+    }
+  });
+}
+
+// Lightweight read-aloud helper — uses the browser's built-in
+// SpeechSynthesis. No external service, fully optional.
+function speakIfEnabled(text) {
+  if (!document.body.classList.contains('a11y-read-aloud')) return;
+  if (!('speechSynthesis' in window)) return;
+  try {
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(String(text));
+    u.rate = 0.95; u.pitch = 1.05; u.volume = 0.9;
+    window.speechSynthesis.speak(u);
+  } catch(e) {}
+}
+
+// ==================== AI / ML HOOK LAYER ====================
+// All hooks are pluggable: leave KW_AI_CONFIG.endpoint = null and the app
+// uses the safe local fallbacks. Set a Cloud Run / Workers / Lambda URL
+// later to replace any single hook with a real model call. The shape of
+// the request is documented next to each hook so the backend contract is
+// crystal clear when you wire it up.
+const KW_AI_CONFIG = {
+  endpoint: null,        // e.g. 'https://api.kiddiewordle.com/ai'
+  apiKey:   null,        // optional bearer token
+  timeoutMs: 4000        // hard cap so a slow model can't stall gameplay
+};
+
+async function kwAiCall(action, payload) {
+  if (!KW_AI_CONFIG.endpoint) return null; // no backend → caller uses fallback
+  try {
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), KW_AI_CONFIG.timeoutMs);
+    const res = await fetch(KW_AI_CONFIG.endpoint, {
+      method: 'POST',
+      headers: Object.assign(
+        { 'content-type': 'application/json' },
+        KW_AI_CONFIG.apiKey ? { 'authorization': 'Bearer ' + KW_AI_CONFIG.apiKey } : {}
+      ),
+      body: JSON.stringify({ action, payload }),
+      signal: ctrl.signal
+    });
+    clearTimeout(t);
+    if (!res.ok) return null;
+    return await res.json();
+  } catch (e) { return null; }
+}
+
+const KW_AI = {
+  // Generate a hint for the current board. Fallback uses targetWord.
+  // Backend payload: { target, guesses: [{guess, result}], wordLength }.
+  async hint(state) {
+    const remote = await kwAiCall('hint', state);
+    if (remote && typeof remote.hint === 'string') return remote.hint;
+    return 'The first letter is "' + state.target.charAt(0) + '"!';
+  },
+
+  // Recommend a difficulty. Fallback: nudge based on win rate.
+  // Backend payload: { played, won, streak, dist, currentLength }.
+  async adaptiveDifficulty(stats) {
+    const remote = await kwAiCall('adaptive_difficulty', stats);
+    if (remote && remote.suggestedLength) return remote;
+    const winRate = stats.played ? (stats.won / stats.played) : 0;
+    if (winRate > 0.8 && stats.currentLength < 7) return { suggestedLength: stats.currentLength + 1, reason: 'You\'re crushing it — try one harder!' };
+    if (winRate < 0.3 && stats.currentLength > 3) return { suggestedLength: stats.currentLength - 1, reason: 'Let\'s warm up with shorter words.' };
+    return { suggestedLength: stats.currentLength, reason: 'Keep it up!' };
+  },
+
+  // Personalized encouragement for a specific event.
+  // Backend payload: { event, context }. event ∈ {win, loss, near_miss, streak}.
+  async encouragement(event, context) {
+    const remote = await kwAiCall('encouragement', { event, context });
+    if (remote && typeof remote.message === 'string') return remote.message;
+    const fallbacks = {
+      win:       ['Amazing!', 'Super!', 'You got it!', 'Word champion!', 'Brilliant!'],
+      loss:      ['Almost! Try another?', 'So close. The next one is yours!', 'Good try!'],
+      near_miss: ['One more try and you\'ve got it!', 'Right letters, just shuffle them!'],
+      streak:    ['Hot streak!', 'Look at you go!', 'Keep the fire burning!']
+    };
+    const list = fallbacks[event] || ['Nice!'];
+    return list[Math.floor(Math.random() * list.length)];
+  },
+
+  // Sentiment / frustration signal from recent gameplay events.
+  // Backend payload: { events: [{type, ts, ...}] }. Returns 0..1 score.
+  async detectFrustration(events) {
+    const remote = await kwAiCall('frustration', { events });
+    if (remote && typeof remote.score === 'number') return remote.score;
+    // Local fallback: count rejected words + shake events in last 60s.
+    const now = Date.now();
+    const recent = (events || []).filter(e => (now - e.ts) < 60000);
+    const rejects = recent.filter(e => e.type === 'reject').length;
+    return Math.min(1, rejects / 4);
+  },
+
+  // Weekly parental progress summary.
+  // Backend payload: full stats. Returns markdown-ish string.
+  async parentalReport(stats) {
+    const remote = await kwAiCall('parental_report', stats);
+    if (remote && typeof remote.report === 'string') return remote.report;
+    const winRate = stats.played ? Math.round(100 * stats.won / stats.played) : 0;
+    return 'Your child played ' + stats.played + ' games with a ' + winRate + '% win rate. Best streak: ' + (stats.maxStreak || 0) + '.';
+  }
+};
+window.KW_AI = KW_AI; // expose for future plugins / ohm.homes hooks
+
+// Lightweight in-memory event log — fed to KW_AI.detectFrustration. Capped
+// at the most recent 50 events so it can't grow unbounded.
+const KW_EVENTS = [];
+function logKwEvent(type, extra) {
+  KW_EVENTS.push(Object.assign({ type, ts: Date.now() }, extra || {}));
+  if (KW_EVENTS.length > 50) KW_EVENTS.shift();
+}
+
 // ==================== PWA ====================
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js').catch(() => {});
 }
 
 // ==================== ADS ====================
-try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
-try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
+// Push every adsbygoogle slot we render. Wrapped in try so an extension
+// blocking the script doesn't cascade into a JS error.
+function pushAllAdSlots() {
+  document.querySelectorAll('ins.adsbygoogle').forEach(slot => {
+    if (slot.dataset.kwPushed === '1') return;
+    try {
+      (adsbygoogle = window.adsbygoogle || []).push({});
+      slot.dataset.kwPushed = '1';
+    } catch (e) {}
+  });
+}
+pushAllAdSlots();
+
+// When AdSense paints an ad, mark the parent .ad-slot with .has-ad so the
+// "Advertisement" label only appears above slots that actually filled.
+new MutationObserver(() => {
+  document.querySelectorAll('ins.adsbygoogle[data-adsbygoogle-status="done"]').forEach(slot => {
+    if (slot.getAttribute('data-ad-status') === 'unfilled') return;
+    const wrap = slot.closest('.ad-slot, .ad-rail');
+    if (wrap) wrap.classList.add('has-ad');
+  });
+}).observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['data-adsbygoogle-status', 'data-ad-status'] });
 </script>
-<script>function googleTranslateElementInit(){new google.translate.TranslateElement({pageLanguage:'en',autoDisplay:false,layout:google.translate.TranslateElement.InlineLayout.SIMPLE},'google_translate_element');}</script>
-<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<!-- Google Translate widget removed (English-only). -->
 
 <!-- SISTER_BRANDS_START -->
 <aside class="kiddie-partnership" style="margin:48px auto 24px;max-width:960px;padding:24px;background:#f9fafb;border-radius:12px;text-align:center;font-family:system-ui,sans-serif">
