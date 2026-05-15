@@ -507,6 +507,71 @@ body.dark .ws-words h4   { color: #aaa; }
 body.dark .ws-word       { background: #3E2723; color: #eee; border-left-color: #FFB300; }
 body.dark .ws-word.found { background: #1B5E20; color: #C8E6C9; border-left-color: #81C784; }
 
+/* WORD FORGE — invent new kid-safe words by fusing syllable-roots from
+   English / Sanskrit / Hindi / Tamil / Maori / Hawaiian / Quechua / Yoruba.
+   Each result shows its component breakdown so kids learn etymology. */
+.wordforge-stage {
+  display: none; flex-direction: column; align-items: center;
+  gap: 18px; padding: 8px; width: 100%; max-width: 720px; margin: 0 auto;
+}
+body.wordforge-mode .wordforge-stage   { display: flex; }
+body.wordforge-mode .board-container   { display: none !important; }
+body.wordforge-mode #keyboard          { display: none !important; }
+.wf-display {
+  width: 100%; text-align: center;
+  background: linear-gradient(135deg, #FFF3E0, #FFECB3);
+  border: 4px solid #FFB300; border-radius: 16px;
+  padding: 22px 16px; box-shadow: 0 4px 0 #FFB300;
+}
+.wf-word {
+  font-size: 42px; font-weight: 900; color: #3E2723;
+  letter-spacing: 1px; word-break: break-word; margin: 0 0 6px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+.wf-pronounce { font-size: 14px; color: #8D6E63; font-style: italic; }
+.wf-breakdown { width: 100%; display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.wf-part {
+  background: #fff; border: 2px solid #B3D8FF; border-radius: 10px;
+  padding: 8px 12px; text-align: center; flex: 1 1 140px; max-width: 200px;
+}
+.wf-part .syl     { font-size: 20px; font-weight: 800; color: var(--blue); display: block; margin-bottom: 2px; }
+.wf-part .src     { font-size: 11px; font-weight: 700; color: var(--orange); text-transform: uppercase; letter-spacing: .06em; display: block; margin-bottom: 4px; }
+.wf-part .meaning { font-size: 12px; color: #555; line-height: 1.3; }
+.wf-controls { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.wf-btn {
+  padding: 12px 22px; border-radius: 999px; border: none;
+  font-size: 15px; font-weight: 800; cursor: pointer;
+  font-family: inherit; display: inline-flex; align-items: center; gap: 6px;
+}
+.wf-btn.primary { background: var(--blue); color: #fff; }
+.wf-btn.speak   { background: var(--green); color: #fff; }
+.wf-btn.save    { background: var(--orange); color: #fff; }
+.wf-btn:disabled { opacity: .5; cursor: not-allowed; }
+.wf-favorites {
+  width: 100%; background: #F8F9FA; border-radius: 12px;
+  padding: 14px; border: 1px solid #E0E0E0;
+}
+.wf-favorites h4 { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: #888; margin: 0 0 10px; }
+.wf-fav-list { display: flex; gap: 8px; flex-wrap: wrap; }
+.wf-fav-item {
+  background: #fff; border: 1px solid #ddd; border-radius: 999px;
+  padding: 6px 10px 6px 14px; font-size: 13px; font-weight: 700;
+  color: #333; display: inline-flex; align-items: center; gap: 6px;
+}
+.wf-fav-item button { background: transparent; border: 0; cursor: pointer; color: #999; font-size: 16px; line-height: 1; padding: 0 4px; }
+.wf-fav-item button:hover { color: #d32f2f; }
+.wf-fav-empty { color: #999; font-size: 12px; font-style: italic; }
+body.dark .wf-display     { background: linear-gradient(135deg, #4E342E, #3E2723); border-color: #FFB300; box-shadow: 0 4px 0 #FFB300; }
+body.dark .wf-word        { color: #FFE082; }
+body.dark .wf-pronounce   { color: #FFCC80; }
+body.dark .wf-part        { background: #2a2a2a; border-color: #555; }
+body.dark .wf-part .syl   { color: #8ab4f8; }
+body.dark .wf-part .src   { color: #FFB300; }
+body.dark .wf-part .meaning { color: #ccc; }
+body.dark .wf-favorites   { background: #1c1c1c; border-color: #444; }
+body.dark .wf-favorites h4 { color: #aaa; }
+body.dark .wf-fav-item    { background: #2a2a2a; color: #eee; border-color: #555; }
+
 .length-btn .num {
   font-size: 24px;
   font-weight: 900;
@@ -1612,6 +1677,11 @@ body.dark .a11y-panel h3 { color: #8ab4f8; }
           <div class="game-name">Anagram Scramble</div>
           <div class="game-sub">Coming soon</div>
         </button>
+        <button class="game-btn" data-game="wordforge">
+          <div class="game-emoji">⚒️</div>
+          <div class="game-name">Word Forge</div>
+          <div class="game-sub">Invent new words</div>
+        </button>
         <button class="game-btn" data-game="wordsearch">
           <div class="game-emoji">&#128269;</div>
           <div class="game-name">Word Search</div>
@@ -1768,6 +1838,27 @@ body.dark .a11y-panel h3 { color: #8ab4f8; }
   </svg>
   <div class="hangman-word" id="hangmanWord"></div>
   <div class="hangman-wrong" id="hangmanWrong"></div>
+</div>
+
+<!-- WORD FORGE STAGE — only shown when body.wordforge-mode is set.
+     Generates new kid-safe words by fusing syllable-roots from English +
+     7 ancient/indigenous languages. Honest about what's invented vs
+     authentic — each part shows its source language and dictionary meaning. -->
+<div class="wordforge-stage" id="wordforgeStage">
+  <div class="wf-display">
+    <p class="wf-word" id="wfWord">—</p>
+    <p class="wf-pronounce" id="wfPronounce">Tap Generate to forge a new word</p>
+  </div>
+  <div class="wf-breakdown" id="wfBreakdown" aria-label="Component sources"></div>
+  <div class="wf-controls">
+    <button class="wf-btn primary" id="wfGenBtn"   type="button">🔄 Generate</button>
+    <button class="wf-btn speak"   id="wfSpeakBtn" type="button" disabled>🔊 Pronounce</button>
+    <button class="wf-btn save"    id="wfSaveBtn"  type="button" disabled>⭐ Save</button>
+  </div>
+  <div class="wf-favorites">
+    <h4>⭐ Saved words (this device)</h4>
+    <div class="wf-fav-list" id="wfFavList"><span class="wf-fav-empty">Save your favorites — they stay on this device only.</span></div>
+  </div>
 </div>
 
 <!-- WORD SEARCH STAGE — only shown when body.wordsearch-mode is set.
@@ -2407,7 +2498,7 @@ const LANG_NAMES = {
 
 // ==================== GAME STATE ====================
 let wordLength = 5; // Default = Classic. (3=Tots, 4=Easy, 5=Classic, 6=Medium, 7=Hard, 8=Expert, 9=Genius)
-let gameType = 'wordle'; // 'wordle' | 'hangman' | 'anagram' | 'wordsearch'
+let gameType = 'wordle'; // 'wordle' | 'hangman' | 'anagram' | 'wordsearch' | 'wordforge'
 let language = 'en';
 const MAX_GUESSES = 6;
 
@@ -3443,6 +3534,7 @@ function startGame(showSetup = true) {
   document.body.classList.toggle('hangman-mode', gameType === 'hangman');
   document.body.classList.toggle('anagram-mode', gameType === 'anagram');
   document.body.classList.toggle('wordsearch-mode', gameType === 'wordsearch');
+  document.body.classList.toggle('wordforge-mode', gameType === 'wordforge');
 
   buildKeyboard();
   if (gameType === 'hangman') {
@@ -3451,6 +3543,8 @@ function startGame(showSetup = true) {
     startAnagram();
   } else if (gameType === 'wordsearch') {
     startWordSearch();
+  } else if (gameType === 'wordforge') {
+    startWordForge();
   } else {
     buildBoard();
   }
@@ -3954,6 +4048,289 @@ function wsBriefBadFlash(cells) {
     if (el) el.classList.add('bad');
   });
 }
+
+// ==================== WORD FORGE ENGINE ====================
+// Generates NEW kid-safe words by fusing syllable-roots drawn from English +
+// Sanskrit + Hindi + Tamil + Maori + Hawaiian + Quechua + Yoruba.
+// Honest framing: each part is a real word (or root) from its source
+// language with its dictionary meaning shown — the FUSION is invented, but
+// the components are authentic. This is the educational layer.
+//
+// Cultural respect: we deliberately AVOID tokenizing sacred names (Brahma,
+// Vishnu, Shiva, Krishna, Allah, Christ, etc.). All listed components are
+// everyday positive-meaning words/roots that can stand on their own.
+//
+// Every generated word is checked against UNSAFE_WORDS (substring match)
+// and re-rolled if it overlaps. Output is title-cased for readability.
+
+const WF_COMPONENTS = [
+  // ---- English (kid-safe everyday roots) ----
+  { syl: 'Joy',    src: 'English',   meaning: 'happiness' },
+  { syl: 'Sun',    src: 'English',   meaning: 'the star at the center of our solar system' },
+  { syl: 'Sky',    src: 'English',   meaning: 'the air above us' },
+  { syl: 'Star',   src: 'English',   meaning: 'a glowing point of light in the night sky' },
+  { syl: 'Moon',   src: 'English',   meaning: "Earth's natural satellite" },
+  { syl: 'Sea',    src: 'English',   meaning: 'a large body of saltwater' },
+  { syl: 'Leaf',   src: 'English',   meaning: 'the flat green part of a plant' },
+  { syl: 'Blue',   src: 'English',   meaning: 'the color of the sky' },
+  { syl: 'Gold',   src: 'English',   meaning: 'a shiny precious metal' },
+  { syl: 'Light',  src: 'English',   meaning: 'brightness from the sun, lamp, or fire' },
+  { syl: 'Dance',  src: 'English',   meaning: 'rhythmic movement to music' },
+  { syl: 'Song',   src: 'English',   meaning: 'a short musical composition with words' },
+  { syl: 'Flame',  src: 'English',   meaning: 'the visible part of a fire' },
+  { syl: 'Dream', src: 'English',    meaning: 'images and ideas during sleep' },
+  { syl: 'Hope',   src: 'English',   meaning: 'a feeling of expectation and desire' },
+  { syl: 'Brave',  src: 'English',   meaning: 'showing courage' },
+  { syl: 'Kind',   src: 'English',   meaning: 'gentle and considerate' },
+  { syl: 'Bright', src: 'English',   meaning: 'shining or full of light' },
+  { syl: 'Wave',   src: 'English',   meaning: 'a moving ridge of water' },
+  { syl: 'River',  src: 'English',   meaning: 'a large flowing stream of water' },
+  { syl: 'Glow',   src: 'English',   meaning: 'a steady soft light' },
+  { syl: 'Spark',  src: 'English',   meaning: 'a tiny burning particle' },
+
+  // ---- Sanskrit (devanāgarī roots, transliterated) ----
+  { syl: 'Ananda', src: 'Sanskrit',  meaning: 'bliss, deep joy' },
+  { syl: 'Shanti', src: 'Sanskrit',  meaning: 'peace, tranquility' },
+  { syl: 'Prem',   src: 'Sanskrit',  meaning: 'love, affection' },
+  { syl: 'Mitra',  src: 'Sanskrit',  meaning: 'friend' },
+  { syl: 'Surya',  src: 'Sanskrit',  meaning: 'the sun' },
+  { syl: 'Tara',   src: 'Sanskrit',  meaning: 'star' },
+  { syl: 'Gita',   src: 'Sanskrit',  meaning: 'song' },
+  { syl: 'Bodhi',  src: 'Sanskrit',  meaning: 'awakening, enlightenment' },
+  { syl: 'Vidya',  src: 'Sanskrit',  meaning: 'knowledge, wisdom' },
+  { syl: 'Kala',   src: 'Sanskrit',  meaning: 'art, skill' },
+  { syl: 'Agni',   src: 'Sanskrit',  meaning: 'fire' },
+  { syl: 'Jal',    src: 'Sanskrit',  meaning: 'water' },
+  { syl: 'Vayu',   src: 'Sanskrit',  meaning: 'wind' },
+  { syl: 'Prana',  src: 'Sanskrit',  meaning: 'life-force, breath' },
+  { syl: 'Satya',  src: 'Sanskrit',  meaning: 'truth' },
+  { syl: 'Dharma', src: 'Sanskrit',  meaning: 'rightful path, duty' },
+  { syl: 'Jaya',   src: 'Sanskrit',  meaning: 'victory' },
+  { syl: 'Diya',   src: 'Sanskrit',  meaning: 'lamp, light' },
+  { syl: 'Kanti',  src: 'Sanskrit',  meaning: 'radiance, beauty' },
+  { syl: 'Manas',  src: 'Sanskrit',  meaning: 'mind, heart' },
+
+  // ---- Hindi (everyday speech) ----
+  { syl: 'Ghar',   src: 'Hindi',     meaning: 'home' },
+  { syl: 'Pyar',   src: 'Hindi',     meaning: 'love' },
+  { syl: 'Khel',   src: 'Hindi',     meaning: 'play, game' },
+  { syl: 'Mela',   src: 'Hindi',     meaning: 'fair, gathering' },
+  { syl: 'Kahani', src: 'Hindi',     meaning: 'story' },
+  { syl: 'Gulab',  src: 'Hindi',     meaning: 'rose' },
+  { syl: 'Aam',    src: 'Hindi',     meaning: 'mango' },
+  { syl: 'Chand',  src: 'Hindi',     meaning: 'moon' },
+  { syl: 'Phool',  src: 'Hindi',     meaning: 'flower' },
+  { syl: 'Hawa',   src: 'Hindi',     meaning: 'air, breeze' },
+  { syl: 'Roshni', src: 'Hindi',     meaning: 'light' },
+
+  // ---- Tamil (one of the oldest living languages) ----
+  { syl: 'Alai',     src: 'Tamil',   meaning: 'wave' },
+  { syl: 'Isai',     src: 'Tamil',   meaning: 'music' },
+  { syl: 'Kavi',     src: 'Tamil',   meaning: 'poem, poet' },
+  { syl: 'Mani',     src: 'Tamil',   meaning: 'bell, jewel' },
+  { syl: 'Pani',     src: 'Tamil',   meaning: 'dew' },
+  { syl: 'Nila',     src: 'Tamil',   meaning: 'moon' },
+  { syl: 'Thendral', src: 'Tamil',   meaning: 'gentle southern breeze' },
+  { syl: 'Malar',    src: 'Tamil',   meaning: 'flower, to bloom' },
+  { syl: 'Kadal',    src: 'Tamil',   meaning: 'sea' },
+  { syl: 'Vanam',    src: 'Tamil',   meaning: 'sky' },
+
+  // ---- Māori (Aotearoa / New Zealand) ----
+  { syl: 'Aroha',  src: 'Māori',     meaning: 'love, compassion' },
+  { syl: 'Whanau', src: 'Māori',     meaning: 'family' },
+  { syl: 'Mana',   src: 'Māori',     meaning: 'spiritual power, prestige' },
+  { syl: 'Wairua', src: 'Māori',     meaning: 'spirit, soul' },
+  { syl: 'Moana',  src: 'Māori',     meaning: 'ocean, deep sea' },
+  { syl: 'Maunga', src: 'Māori',     meaning: 'mountain' },
+  { syl: 'Kai',    src: 'Māori',     meaning: 'food, to eat' },
+  { syl: 'Awa',    src: 'Māori',     meaning: 'river, valley' },
+
+  // ---- Hawaiian (Olelo Hawaii) ----
+  { syl: 'Aloha',  src: 'Hawaiian',  meaning: 'love, hello, goodbye' },
+  { syl: 'Keiki',  src: 'Hawaiian',  meaning: 'child' },
+  { syl: 'Lani',   src: 'Hawaiian',  meaning: 'sky, heaven' },
+  { syl: 'Pua',    src: 'Hawaiian',  meaning: 'flower, blossom' },
+  { syl: 'Nani',   src: 'Hawaiian',  meaning: 'beautiful' },
+  { syl: 'Honu',   src: 'Hawaiian',  meaning: 'sea turtle' },
+  { syl: 'Mahalo', src: 'Hawaiian',  meaning: 'thanks, gratitude' },
+  { syl: 'Mauka',  src: 'Hawaiian',  meaning: 'toward the mountain' },
+
+  // ---- Quechua (Andes — Inca-era language, still spoken) ----
+  { syl: 'Inti',   src: 'Quechua',   meaning: 'sun (sacred to Andean peoples)' },
+  { syl: 'Killa',  src: 'Quechua',   meaning: 'moon' },
+  { syl: 'Wayra',  src: 'Quechua',   meaning: 'wind' },
+  { syl: 'Mayu',   src: 'Quechua',   meaning: 'river' },
+  { syl: 'Wasi',   src: 'Quechua',   meaning: 'house' },
+  { syl: 'Runa',   src: 'Quechua',   meaning: 'person, human' },
+  { syl: 'Quri',   src: 'Quechua',   meaning: 'gold' },
+  { syl: 'Sumaq',  src: 'Quechua',   meaning: 'beautiful, good' },
+
+  // ---- Yoruba (West Africa) ----
+  { syl: 'Ife',    src: 'Yoruba',    meaning: 'love' },
+  { syl: 'Ola',    src: 'Yoruba',    meaning: 'honor, wealth' },
+  { syl: 'Ade',    src: 'Yoruba',    meaning: 'crown' },
+  { syl: 'Tola',   src: 'Yoruba',    meaning: 'wealth is great' },
+  { syl: 'Bisi',   src: 'Yoruba',    meaning: 'born to' },
+  { syl: 'Ayo',    src: 'Yoruba',    meaning: 'joy' },
+  { syl: 'Femi',   src: 'Yoruba',    meaning: 'love me' },
+  { syl: 'Iyabo',  src: 'Yoruba',    meaning: 'mother has returned' },
+];
+
+let WF_CURRENT = null;
+
+function wfRand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+function wfPickComponents() {
+  // 60% two-component, 40% three-component for variety.
+  const n = Math.random() < 0.6 ? 2 : 3;
+  const picked = [];
+  const usedSrc = new Set();
+  let safety = 50;
+  while (picked.length < n && safety-- > 0) {
+    const c = wfRand(WF_COMPONENTS);
+    // Prefer not to repeat the same source language back-to-back in a 2-part word.
+    if (n === 2 && picked.length === 1 && c.src === picked[0].src) continue;
+    if (picked.some(p => p.syl === c.syl)) continue;
+    picked.push(c);
+  }
+  return picked;
+}
+
+function wfFuse(parts) {
+  // Title-case each component's syllable, concatenate.
+  return parts.map(p => p.syl.charAt(0).toUpperCase() + p.syl.slice(1).toLowerCase()).join('');
+}
+
+function wfIsSafe(word) {
+  // UNSAFE_WORDS is uppercase 5-letter set from earlier; check substring overlap.
+  const upper = word.toUpperCase();
+  if (typeof UNSAFE_WORDS === 'undefined') return true;
+  for (const bad of UNSAFE_WORDS) {
+    if (upper.indexOf(bad) !== -1) return false;
+  }
+  return true;
+}
+
+function wfGenerate() {
+  let attempts = 0;
+  let parts;
+  let word;
+  do {
+    parts = wfPickComponents();
+    word = wfFuse(parts);
+    attempts++;
+  } while ((!wfIsSafe(word) || word.length < 5 || word.length > 16) && attempts < 30);
+
+  WF_CURRENT = { word, parts };
+  wfRender();
+}
+
+function wfRender() {
+  if (!WF_CURRENT) return;
+  document.getElementById('wfWord').textContent = WF_CURRENT.word;
+  document.getElementById('wfPronounce').textContent =
+    'Forged from ' + WF_CURRENT.parts.length + ' roots — tap 🔊 to hear it';
+  const bd = document.getElementById('wfBreakdown');
+  bd.innerHTML = '';
+  WF_CURRENT.parts.forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'wf-part';
+    card.innerHTML =
+      '<span class="syl"></span>' +
+      '<span class="src"></span>' +
+      '<span class="meaning"></span>';
+    card.querySelector('.syl').textContent = p.syl;
+    card.querySelector('.src').textContent = p.src;
+    card.querySelector('.meaning').textContent = p.meaning;
+    bd.appendChild(card);
+  });
+  document.getElementById('wfSpeakBtn').disabled = false;
+  document.getElementById('wfSaveBtn').disabled  = false;
+}
+
+function wfSpeak() {
+  if (!WF_CURRENT) return;
+  if (!('speechSynthesis' in window)) {
+    showToast('Speech not supported in this browser');
+    return;
+  }
+  const utter = new SpeechSynthesisUtterance(WF_CURRENT.word);
+  utter.rate = 0.85; utter.pitch = 1.0;
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(utter);
+}
+
+function wfLoadFavorites() {
+  try { return JSON.parse(localStorage.getItem('kiddiewordle_forge_favs') || '[]'); }
+  catch (e) { return []; }
+}
+
+function wfSaveFavorites(list) {
+  try { localStorage.setItem('kiddiewordle_forge_favs', JSON.stringify(list.slice(0, 50))); } catch (e) {}
+}
+
+function wfRenderFavorites() {
+  const list = wfLoadFavorites();
+  const el = document.getElementById('wfFavList');
+  if (!el) return;
+  el.innerHTML = '';
+  if (list.length === 0) {
+    el.innerHTML = '<span class="wf-fav-empty">Save your favorites — they stay on this device only.</span>';
+    return;
+  }
+  list.forEach((item, idx) => {
+    const chip = document.createElement('span');
+    chip.className = 'wf-fav-item';
+    const word = document.createElement('span');
+    word.textContent = item.word;
+    word.title = item.parts.map(p => p.syl + ' (' + p.src + ': ' + p.meaning + ')').join(' + ');
+    word.style.cursor = 'pointer';
+    word.addEventListener('click', () => { WF_CURRENT = item; wfRender(); });
+    const x = document.createElement('button');
+    x.type = 'button'; x.textContent = '×'; x.title = 'Remove';
+    x.addEventListener('click', () => {
+      const cur = wfLoadFavorites();
+      cur.splice(idx, 1);
+      wfSaveFavorites(cur);
+      wfRenderFavorites();
+    });
+    chip.appendChild(word); chip.appendChild(x);
+    el.appendChild(chip);
+  });
+}
+
+function wfSave() {
+  if (!WF_CURRENT) return;
+  const list = wfLoadFavorites();
+  if (list.some(i => i.word === WF_CURRENT.word)) {
+    showToast('Already saved');
+    return;
+  }
+  list.unshift(WF_CURRENT);
+  wfSaveFavorites(list);
+  wfRenderFavorites();
+  showToast('Saved ' + WF_CURRENT.word + ' ⭐');
+}
+
+function startWordForge() {
+  document.getElementById('boardContainer').style.display    = 'none';
+  document.getElementById('hangmanStage').style.display      = 'none';
+  document.getElementById('anagramStage').style.display      = 'none';
+  document.getElementById('wordsearchStage').style.display   = 'none';
+  document.getElementById('wordforgeStage').style.display    = 'flex';
+  document.getElementById('keyboard').style.display          = 'none';
+  wfRenderFavorites();
+  wfGenerate(); // start with a fresh word so the screen isn't empty
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const g = document.getElementById('wfGenBtn');
+  const s = document.getElementById('wfSpeakBtn');
+  const v = document.getElementById('wfSaveBtn');
+  if (g) g.addEventListener('click', wfGenerate);
+  if (s) s.addEventListener('click', wfSpeak);
+  if (v) v.addEventListener('click', wfSave);
+});
 
 // ==================== INIT ====================
 initSetup();
