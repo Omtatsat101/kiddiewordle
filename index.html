@@ -419,6 +419,94 @@ body.dark .an-btn.clear { background: #444; color: #ddd; }
   75%     { transform: translateX(4px); }
 }
 
+/* WORD SEARCH — grid of letters + a list of target words. Tap-tap UX
+   (first tap = start cell, second tap = end cell on same row/col/diagonal).
+   Found words get crossed off and the cells lock. */
+.wordsearch-stage {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+  width: 100%;
+}
+body.wordsearch-mode .wordsearch-stage { display: flex; }
+body.wordsearch-mode .board-container  { display: none !important; }
+body.wordsearch-mode #keyboard         { display: none !important; }
+
+.ws-meta {
+  font-size: 13px; font-weight: 700; color: #888;
+  letter-spacing: 1px; text-align: center;
+}
+.ws-meta .ws-found-count { color: var(--green); font-weight: 900; }
+
+.ws-layout {
+  display: flex; gap: 14px; flex-wrap: wrap;
+  justify-content: center; align-items: flex-start;
+}
+@media (max-width: 600px) {
+  .ws-layout { flex-direction: column; align-items: center; }
+}
+
+.ws-grid {
+  display: grid; gap: 3px;
+  background: #fff;
+  border: 3px solid var(--blue);
+  border-radius: 12px;
+  padding: 8px;
+}
+.ws-cell {
+  width: 32px; height: 32px;
+  display: grid; place-items: center;
+  font-size: 16px; font-weight: 800;
+  background: #F8F9FA; color: #333;
+  border-radius: 6px;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: background .12s, color .12s, transform .08s;
+}
+.ws-cell:hover:not(.locked) { background: #E3F2FD; }
+.ws-cell.start  { background: var(--orange); color: #fff; transform: scale(1.06); }
+.ws-cell.preview { background: #FFE0B2; color: #5D4037; }
+.ws-cell.found  { background: #C8E6C9; color: #1B5E20; }
+.ws-cell.locked { cursor: default; }
+.ws-cell.bad    { background: #FFCDD2; color: #B71C1C; animation: kw-shake .35s; }
+@media (max-width: 480px) {
+  .ws-cell { width: 28px; height: 28px; font-size: 14px; }
+}
+
+.ws-words {
+  display: flex; flex-direction: column; gap: 6px;
+  min-width: 140px; max-width: 200px;
+}
+.ws-words h4 {
+  font-size: 12px; text-transform: uppercase; letter-spacing: .08em;
+  color: #888; margin: 0 0 4px;
+}
+.ws-word {
+  font-size: 14px; font-weight: 700; color: #333;
+  padding: 6px 10px; border-radius: 6px;
+  background: #FFF8E1; border-left: 4px solid var(--orange);
+  transition: opacity .2s, color .2s;
+}
+.ws-word.found {
+  opacity: 0.55; text-decoration: line-through;
+  background: #E8F5E9; border-left-color: var(--green); color: #1B5E20;
+}
+@media (max-width: 600px) {
+  .ws-words { flex-direction: row; flex-wrap: wrap; max-width: 100%; }
+  .ws-word { font-size: 12px; padding: 4px 8px; }
+}
+
+body.dark .ws-grid       { background: #2a2a2a; border-color: #8ab4f8; }
+body.dark .ws-cell       { background: #1c1c1c; color: #eee; }
+body.dark .ws-cell:hover:not(.locked) { background: #1a3a5c; }
+body.dark .ws-cell.found { background: #1B5E20; color: #C8E6C9; }
+body.dark .ws-words h4   { color: #aaa; }
+body.dark .ws-word       { background: #3E2723; color: #eee; border-left-color: #FFB300; }
+body.dark .ws-word.found { background: #1B5E20; color: #C8E6C9; border-left-color: #81C784; }
+
 .length-btn .num {
   font-size: 24px;
   font-weight: 900;
@@ -1524,7 +1612,7 @@ body.dark .a11y-panel h3 { color: #8ab4f8; }
           <div class="game-name">Anagram Scramble</div>
           <div class="game-sub">Coming soon</div>
         </button>
-        <button class="game-btn" data-game="wordsearch" disabled>
+        <button class="game-btn" data-game="wordsearch">
           <div class="game-emoji">&#128269;</div>
           <div class="game-name">Word Search</div>
           <div class="game-sub">Coming soon</div>
@@ -1680,6 +1768,20 @@ body.dark .a11y-panel h3 { color: #8ab4f8; }
   </svg>
   <div class="hangman-word" id="hangmanWord"></div>
   <div class="hangman-wrong" id="hangmanWrong"></div>
+</div>
+
+<!-- WORD SEARCH STAGE — only shown when body.wordsearch-mode is set.
+     Tap-tap selection (no drag, mobile-friendly). 4-6 target words depending
+     on word length. 8 directions: H, V, D (forward + reverse). -->
+<div class="wordsearch-stage" id="wordsearchStage">
+  <div class="ws-meta" id="wsMeta">Tap the first letter, then the last letter of each word</div>
+  <div class="ws-layout">
+    <div class="ws-grid" id="wsGrid" role="grid" aria-label="Word search grid"></div>
+    <div class="ws-words">
+      <h4>Find these words</h4>
+      <div id="wsWordList"></div>
+    </div>
+  </div>
 </div>
 
 <!-- ANAGRAM SCRAMBLE STAGE — only shown when body.anagram-mode is set.
@@ -2305,7 +2407,7 @@ const LANG_NAMES = {
 
 // ==================== GAME STATE ====================
 let wordLength = 5; // Default = Classic. (3=Tots, 4=Easy, 5=Classic, 6=Medium, 7=Hard, 8=Expert, 9=Genius)
-let gameType = 'wordle'; // 'wordle' | 'hangman' | 'anagram' (wordsearch stub)
+let gameType = 'wordle'; // 'wordle' | 'hangman' | 'anagram' | 'wordsearch'
 let language = 'en';
 const MAX_GUESSES = 6;
 
@@ -3340,12 +3442,15 @@ function startGame(showSetup = true) {
 
   document.body.classList.toggle('hangman-mode', gameType === 'hangman');
   document.body.classList.toggle('anagram-mode', gameType === 'anagram');
+  document.body.classList.toggle('wordsearch-mode', gameType === 'wordsearch');
 
   buildKeyboard();
   if (gameType === 'hangman') {
     startHangman();
   } else if (gameType === 'anagram') {
     startAnagram();
+  } else if (gameType === 'wordsearch') {
+    startWordSearch();
   } else {
     buildBoard();
   }
@@ -3611,6 +3716,244 @@ document.addEventListener('DOMContentLoaded', () => {
   if (cb) cb.addEventListener('click', anagramClear);
   if (ub) ub.addEventListener('click', anagramSubmit);
 });
+
+// ==================== WORD SEARCH ENGINE ====================
+// 4–6 target words from the currently-loaded WORDS pool, placed on a grid
+// in 8 directions (H, V, D forward + reverse). Tap first cell, then last
+// cell on the same line — if it spells a target word in either direction,
+// the word is marked found and the cells lock. All words found = win.
+let WS_STATE = null;
+const WS_DIRS = [
+  [0, 1],   // → right
+  [0, -1],  // ← left
+  [1, 0],   // ↓ down
+  [-1, 0],  // ↑ up
+  [1, 1],   // ↘ down-right
+  [-1, -1], // ↖ up-left
+  [1, -1],  // ↙ down-left
+  [-1, 1],  // ↗ up-right
+];
+
+function wsRandInt(n) { return Math.floor(Math.random() * n); }
+
+function wsPickTargetWords() {
+  // Aim for 4–6 words; cap word length sanity at <= grid size.
+  const maxWords = wordLength <= 4 ? 4 : wordLength <= 6 ? 5 : 6;
+  const candidates = WORDS.filter(w => typeof w === 'string' && w.length === wordLength);
+  if (candidates.length < maxWords) return candidates.slice(); // tiny pool fallback
+  const picked = [];
+  const used = new Set();
+  let attempts = 0;
+  while (picked.length < maxWords && attempts < 200) {
+    const w = candidates[wsRandInt(candidates.length)].toUpperCase();
+    if (!used.has(w)) {
+      picked.push(w);
+      used.add(w);
+    }
+    attempts++;
+  }
+  return picked;
+}
+
+function wsBuildGrid(words) {
+  // Grid size: roughly word-length + 4, with a min of 8 and max of 12.
+  const size = Math.min(12, Math.max(8, wordLength + 4));
+  // Initialize empty grid.
+  const grid = Array.from({ length: size }, () => Array(size).fill(null));
+
+  function tryPlace(word) {
+    // Up to 80 placement attempts per word.
+    for (let attempt = 0; attempt < 80; attempt++) {
+      const dir = WS_DIRS[wsRandInt(WS_DIRS.length)];
+      const r0 = wsRandInt(size);
+      const c0 = wsRandInt(size);
+      // Compute end cell + bounds check.
+      const rEnd = r0 + dir[0] * (word.length - 1);
+      const cEnd = c0 + dir[1] * (word.length - 1);
+      if (rEnd < 0 || rEnd >= size || cEnd < 0 || cEnd >= size) continue;
+      // Check no conflicts.
+      let ok = true;
+      for (let i = 0; i < word.length; i++) {
+        const r = r0 + dir[0] * i;
+        const c = c0 + dir[1] * i;
+        const existing = grid[r][c];
+        if (existing !== null && existing !== word[i]) { ok = false; break; }
+      }
+      if (!ok) continue;
+      // Place.
+      for (let i = 0; i < word.length; i++) {
+        grid[r0 + dir[0] * i][c0 + dir[1] * i] = word[i];
+      }
+      return true;
+    }
+    return false;
+  }
+
+  const placed = [];
+  for (const w of words) {
+    if (tryPlace(w)) placed.push(w);
+  }
+  // Fill empty cells with random A–Z.
+  const ALPHA = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  for (let r = 0; r < size; r++) {
+    for (let c = 0; c < size; c++) {
+      if (grid[r][c] === null) grid[r][c] = ALPHA[wsRandInt(26)];
+    }
+  }
+  return { grid, size, placed };
+}
+
+function startWordSearch() {
+  const targetWords = wsPickTargetWords();
+  if (targetWords.length === 0) {
+    showToast('No words available for this difficulty');
+    return;
+  }
+  const { grid, size, placed } = wsBuildGrid(targetWords);
+  WS_STATE = {
+    grid,
+    size,
+    words: placed,
+    found: new Set(),
+    selectedStart: null, // {r, c} or null
+    locked: false,
+  };
+  document.getElementById('boardContainer').style.display = 'none';
+  document.getElementById('hangmanStage').style.display = 'none';
+  document.getElementById('anagramStage').style.display = 'none';
+  document.getElementById('wordsearchStage').style.display = 'flex';
+  document.getElementById('keyboard').style.display = 'none';
+  renderWordSearch();
+}
+
+function renderWordSearch() {
+  if (!WS_STATE) return;
+  const grid = document.getElementById('wsGrid');
+  grid.style.gridTemplateColumns = `repeat(${WS_STATE.size}, auto)`;
+  grid.innerHTML = '';
+  for (let r = 0; r < WS_STATE.size; r++) {
+    for (let c = 0; c < WS_STATE.size; c++) {
+      const el = document.createElement('div');
+      el.className = 'ws-cell';
+      el.setAttribute('role', 'gridcell');
+      el.textContent = WS_STATE.grid[r][c];
+      el.dataset.r = r;
+      el.dataset.c = c;
+      if (WS_STATE.selectedStart && WS_STATE.selectedStart.r === r && WS_STATE.selectedStart.c === c) {
+        el.classList.add('start');
+      }
+      // Mark found cells.
+      if (WS_STATE.foundCells && WS_STATE.foundCells.some(fc => fc.r === r && fc.c === c)) {
+        el.classList.add('found', 'locked');
+      }
+      el.addEventListener('click', () => wsTapCell(r, c));
+      grid.appendChild(el);
+    }
+  }
+  // Word list.
+  const list = document.getElementById('wsWordList');
+  list.innerHTML = '';
+  WS_STATE.words.forEach(w => {
+    const el = document.createElement('div');
+    el.className = 'ws-word' + (WS_STATE.found.has(w) ? ' found' : '');
+    el.textContent = w;
+    list.appendChild(el);
+  });
+  // Meta.
+  const meta = document.getElementById('wsMeta');
+  if (WS_STATE.found.size === WS_STATE.words.length) {
+    meta.innerHTML = '<span class="ws-found-count">All ' + WS_STATE.words.length + ' found!</span>';
+  } else {
+    meta.innerHTML = 'Tap first + last letter of each word · <span class="ws-found-count">' +
+                     WS_STATE.found.size + ' / ' + WS_STATE.words.length + '</span>';
+  }
+}
+
+function wsTapCell(r, c) {
+  if (!WS_STATE || WS_STATE.locked || gameOver) return;
+  // First tap → set start.
+  if (!WS_STATE.selectedStart) {
+    WS_STATE.selectedStart = { r, c };
+    renderWordSearch();
+    return;
+  }
+  // Second tap on same cell → cancel.
+  if (WS_STATE.selectedStart.r === r && WS_STATE.selectedStart.c === c) {
+    WS_STATE.selectedStart = null;
+    renderWordSearch();
+    return;
+  }
+  // Validate line + check for word match.
+  const result = wsCheckLine(WS_STATE.selectedStart, { r, c });
+  if (!result.valid) {
+    // Brief bad-flash on both endpoints.
+    wsBriefBadFlash([WS_STATE.selectedStart, { r, c }]);
+    WS_STATE.selectedStart = null;
+    setTimeout(() => renderWordSearch(), 350);
+    return;
+  }
+  if (result.matchedWord) {
+    WS_STATE.found.add(result.matchedWord);
+    WS_STATE.foundCells = (WS_STATE.foundCells || []).concat(result.cells);
+    WS_STATE.selectedStart = null;
+    playSound('correct');
+    renderWordSearch();
+    if (WS_STATE.found.size === WS_STATE.words.length) {
+      // WIN
+      gameOver = true;
+      WS_STATE.locked = true;
+      KW_AI.encouragement('win', { game: 'wordsearch', words: Array.from(WS_STATE.found) })
+        .then(msg => { showToast(msg); speakIfEnabled(msg); })
+        .catch(() => showToast('You found them all!'));
+      logKwEvent('win', { game: 'wordsearch' });
+      launchConfetti();
+      updateStats(true, 1);
+      setTimeout(() => showStatsModal(), 1500);
+    }
+  } else {
+    // Valid line but not in word list — show as preview, then clear.
+    wsBriefBadFlash(result.cells);
+    WS_STATE.selectedStart = null;
+    setTimeout(() => renderWordSearch(), 350);
+  }
+}
+
+function wsCheckLine(a, b) {
+  const dr = b.r - a.r;
+  const dc = b.c - a.c;
+  // Must be horizontal, vertical, or 45-degree diagonal.
+  if (dr !== 0 && dc !== 0 && Math.abs(dr) !== Math.abs(dc)) {
+    return { valid: false };
+  }
+  const len = Math.max(Math.abs(dr), Math.abs(dc)) + 1;
+  if (len < 2) return { valid: false };
+  const stepR = dr === 0 ? 0 : dr / Math.abs(dr);
+  const stepC = dc === 0 ? 0 : dc / Math.abs(dc);
+  const cells = [];
+  let str = '';
+  for (let i = 0; i < len; i++) {
+    const r = a.r + stepR * i;
+    const c = a.c + stepC * i;
+    cells.push({ r, c });
+    str += WS_STATE.grid[r][c];
+  }
+  // Match in either direction.
+  const reverse = str.split('').reverse().join('');
+  for (const w of WS_STATE.words) {
+    if (WS_STATE.found.has(w)) continue;
+    if (w === str || w === reverse) {
+      return { valid: true, matchedWord: w, cells };
+    }
+  }
+  return { valid: true, matchedWord: null, cells };
+}
+
+function wsBriefBadFlash(cells) {
+  cells.forEach(({ r, c }) => {
+    const el = document.querySelector('.ws-cell[data-r="' + r + '"][data-c="' + c + '"]');
+    if (el) el.classList.add('bad');
+  });
+}
 
 // ==================== INIT ====================
 initSetup();
