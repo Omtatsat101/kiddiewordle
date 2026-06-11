@@ -1614,6 +1614,115 @@ body.a11y-calm .row-shake    { animation: none; }
 body.dark .pretext-strip { background: #2a2a3e; border-color: #5a8ad6; color: #eee; }
 body.dark .pretext-strip .pretext-word { color: #ffd54f; }
 
+/* ============================================================
+   DAILY WORD — gentle "Today's Word" entry + theme banner +
+   reflective post-win card. Calm palette, soft motion.
+   ============================================================ */
+.daily-cta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto 20px;
+  padding: 14px 18px;
+  background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);
+  border: 2px solid #FFB74D;
+  border-radius: 16px;
+  cursor: pointer;
+  text-align: left;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 2px 8px rgba(255,152,0,0.15);
+}
+.daily-cta:hover { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(255,152,0,0.25); }
+.daily-cta:active { transform: translateY(0); }
+.daily-cta-emoji { font-size: 30px; line-height: 1; flex-shrink: 0; }
+.daily-cta-text { display: flex; flex-direction: column; flex: 1; }
+.daily-cta-title { font-size: 17px; font-weight: 800; color: #E65100; }
+.daily-cta-sub { font-size: 12px; color: #8D6E63; margin-top: 1px; }
+.daily-cta-arrow { font-size: 22px; color: #E65100; font-weight: 800; flex-shrink: 0; }
+.daily-cta.done { background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%); border-color: #81C784; }
+.daily-cta.done .daily-cta-title { color: #2E7D32; }
+.daily-cta.done .daily-cta-arrow { color: #2E7D32; }
+body.dark .daily-cta { background: linear-gradient(135deg,#3a3520 0%,#4a3f25 100%); border-color: #c9962f; }
+body.dark .daily-cta-title { color: #ffcc80; }
+body.dark .daily-cta-sub { color: #d7c4a8; }
+body.dark .daily-cta-arrow { color: #ffcc80; }
+body.dark .daily-cta.done { background: linear-gradient(135deg,#23341f 0%,#2c4427 100%); border-color: #81C784; }
+body.dark .daily-cta.done .daily-cta-title,
+body.dark .daily-cta.done .daily-cta-arrow { color: #a5d6a7; }
+
+/* Theme banner shown during daily play */
+.daily-banner {
+  max-width: 540px;
+  margin: 4px auto 8px;
+  padding: 8px 16px;
+  background: #FFF8E1;
+  border: 2px solid #FFD54F;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #5D4037;
+  text-align: center;
+  line-height: 1.4;
+}
+.daily-banner .dt-name { color: #E65100; font-weight: 800; }
+body.dark .daily-banner { background: #2a2a3e; border-color: #5a8ad6; color: #eee; }
+body.dark .daily-banner .dt-name { color: #ffcc80; }
+
+/* Reflective post-win card */
+.daily-reflect-card {
+  text-align: center;
+  padding: 8px 4px 4px;
+}
+.daily-reflect-emoji { font-size: 56px; line-height: 1; margin-bottom: 6px; }
+.daily-reflect-word {
+  font-size: 30px;
+  font-weight: 900;
+  letter-spacing: 4px;
+  color: var(--green-dark, #2E7D32);
+  margin: 4px 0 2px;
+}
+.daily-reflect-theme { font-size: 15px; color: #8D6E63; margin-bottom: 14px; }
+.daily-reflect-theme strong { color: #E65100; }
+.daily-reflect-prompt {
+  background: #F1F8E9;
+  border: 2px dashed #AED581;
+  border-radius: 14px;
+  padding: 14px 16px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #33691E;
+  margin: 0 auto 16px;
+  max-width: 380px;
+}
+.daily-reflect-streak {
+  font-size: 14px;
+  color: #6D4C41;
+  margin-bottom: 14px;
+}
+.daily-reflect-streak .dr-num { font-weight: 800; color: #E65100; }
+.daily-reflect-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.daily-reflect-btn {
+  padding: 11px 20px;
+  border: none;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.daily-reflect-btn.primary { background: var(--green, #4CAF50); color: #fff; }
+.daily-reflect-btn.ghost { background: #ECEFF1; color: #455A64; }
+.daily-reflect-comeback { font-size: 13px; color: #90A4AE; margin-top: 14px; }
+body.dark .daily-reflect-word { color: #a5d6a7; }
+body.dark .daily-reflect-theme { color: #d7c4a8; }
+body.dark .daily-reflect-theme strong { color: #ffcc80; }
+body.dark .daily-reflect-prompt { background: #243224; border-color: #5a7d3a; color: #c5e1a5; }
+body.dark .daily-reflect-streak { color: #d7c4a8; }
+body.dark .daily-reflect-btn.ghost { background: #37474F; color: #CFD8DC; }
+/* Respect calm/reduced-motion preferences already used by the app */
+body.a11y-calm .daily-cta:hover { transform: none; box-shadow: 0 2px 8px rgba(255,152,0,0.15); }
+
 /* Accessibility menu button + panel */
 .a11y-toggle { position: fixed; top: 12px; right: 56px; z-index: 100; }
 .a11y-panel {
@@ -1669,6 +1778,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="setup-card">
     <h1>KiddieWordle</h1>
     <div class="subtitle">Pick your challenge & language!</div>
+
+    <button class="daily-cta" id="dailyCta" type="button">
+      <span class="daily-cta-emoji" id="dailyCtaEmoji">&#127749;</span>
+      <span class="daily-cta-text">
+        <span class="daily-cta-title">Today&rsquo;s Word</span>
+        <span class="daily-cta-sub" id="dailyCtaSub">One gentle word a day &middot; theme inside</span>
+      </span>
+      <span class="daily-cta-arrow">&rarr;</span>
+    </button>
 
     <div class="setup-section">
       <h3>Pick a game</h3>
@@ -1824,6 +1942,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   &nbsp;·&nbsp; <span style="color:var(--green);">Green</span> = right spot
   &nbsp;·&nbsp; <span style="color:#F9A825;">Yellow</span> = right letter, wrong spot
 </div>
+
+<!-- DAILY THEME BANNER — only shown during Today's Word play -->
+<div class="daily-banner" id="dailyBanner" style="display:none;"></div>
 
 <!-- GAME BOARD (Wordle) -->
 <div class="board-container" id="boardContainer" style="display:none;">
@@ -2026,6 +2147,24 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
 
     <button class="btn btn-blue" onclick="closeKwModal('statsModal')" style="margin-top:6px;">Close</button>
+  </div>
+</div>
+
+<!-- DAILY REFLECTION MODAL — gentle post-win moment for Today's Word -->
+<div class="modal-overlay" id="dailyReflectModal">
+  <div class="modal">
+    <div class="daily-reflect-card">
+      <div class="daily-reflect-emoji" id="drEmoji">&#127881;</div>
+      <div class="daily-reflect-word" id="drWord">HAPPY</div>
+      <div class="daily-reflect-theme" id="drTheme">Today&rsquo;s theme: <strong>Joy</strong></div>
+      <div class="daily-reflect-prompt" id="drPrompt">What made you smile today?</div>
+      <div class="daily-reflect-streak" id="drStreak"></div>
+      <div class="daily-reflect-actions">
+        <button class="daily-reflect-btn primary" id="drShareBtn" type="button">Share</button>
+        <button class="daily-reflect-btn ghost" id="drCloseBtn" type="button">Done</button>
+      </div>
+      <div class="daily-reflect-comeback">A new word and a new theme arrive tomorrow. &#127807;</div>
+    </div>
   </div>
 </div>
 
@@ -2518,6 +2657,108 @@ let VALID_WORDS = new Set();
 // Words the player tried that we couldn't validate (neither local list nor
 // dictionary API). Kept in memory for the browser session only.
 let SESSION_REJECTED_WORDS = new Set();
+
+// ==================== DAILY WORD ("Today's Word") ====================
+// A gentle, mindful once-a-day word. Deterministic by calendar date so every
+// child worldwide shares the same word + theme each day. No accounts, no
+// network — the seed is the date, the pool is the local word list. Aligns with
+// the founder vision: daily themes (clarity, compassion, courage...), a
+// reflective moment after solving, calm not addictive.
+let dailyMode = false;        // true while the player is on Today's Word
+const KW_DAILY = (function () {
+  const STORE_KEY = 'kiddiewordle_daily';
+  // 14 mindful themes — each a child-friendly description + a gentle reflection
+  // prompt for after the word is solved. Rotates one per day.
+  const THEMES = [
+    { name: 'Kindness',   emoji: '\u{1F49D}', desc: 'being gentle and caring to others', reflect: 'Can you do one kind thing for someone today?' },
+    { name: 'Courage',    emoji: '\u{1F981}', desc: 'being brave even when something feels hard', reflect: 'What is one brave little thing you could try today?' },
+    { name: 'Calm',       emoji: '\u{1F30A}', desc: 'feeling quiet and peaceful inside', reflect: 'Take three slow breaths. How does your body feel?' },
+    { name: 'Wonder',     emoji: '✨',    desc: 'feeling amazed by the world around you', reflect: 'What is one thing you saw today that made you go "wow"?' },
+    { name: 'Patience',   emoji: '\u{1F422}', desc: 'waiting calmly without rushing', reflect: 'When is it hard for you to wait? You did it here!' },
+    { name: 'Gratitude',  emoji: '\u{1F31E}', desc: 'feeling thankful for good things', reflect: 'Name one thing you are thankful for right now.' },
+    { name: 'Curiosity',  emoji: '\u{1F50D}', desc: 'wanting to learn and ask questions', reflect: 'What is one question you are curious about today?' },
+    { name: 'Hope',       emoji: '\u{1F308}', desc: 'believing good things can happen', reflect: 'What is one thing you are looking forward to?' },
+    { name: 'Focus',      emoji: '\u{1F3AF}', desc: 'paying close attention to one thing', reflect: 'You stayed focused to solve this. Nice work!' },
+    { name: 'Joy',        emoji: '\u{1F60A}', desc: 'feeling happy and bright', reflect: 'What made you smile today?' },
+    { name: 'Peace',      emoji: '\u{1F54A}', desc: 'feeling settled and safe', reflect: 'Where is your favorite calm, peaceful place?' },
+    { name: 'Clarity',    emoji: '\u{1F4A1}', desc: 'seeing and understanding things clearly', reflect: 'What is one thing you understand better now?' },
+    { name: 'Compassion', emoji: '\u{1F917}', desc: 'caring when someone feels sad', reflect: 'How could you help a friend who feels down?' },
+    { name: 'Renewal',    emoji: '\u{1F331}', desc: 'starting fresh, like a new sprout', reflect: 'Tomorrow is a brand new day. What will you grow?' }
+  ];
+
+  // Local date as YYYY-MM-DD (uses the child's own calendar day).
+  function todayKey() {
+    const d = new Date();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return d.getFullYear() + '-' + m + '-' + day;
+  }
+  // Whole days since a fixed epoch — the deterministic daily seed.
+  function dayIndex() {
+    const d = new Date();
+    const utcMidnight = Date.UTC(d.getFullYear(), d.getMonth(), d.getDate());
+    return Math.floor(utcMidnight / 86400000);
+  }
+  function theme() { return THEMES[dayIndex() % THEMES.length]; }
+
+  // Pick the day's word deterministically from a 5-letter pool (the canonical
+  // Daily experience is Classic / 5-letter / English). Falls back to whatever
+  // WORDS is currently loaded if that pool isn't available.
+  function pickWord() {
+    let pool = null;
+    if (Array.isArray(window.WORDLE_EN_5_SOLUTIONS) && window.WORDLE_EN_5_SOLUTIONS.length) {
+      pool = window.WORDLE_EN_5_SOLUTIONS;
+    } else if (Array.isArray(WORDS) && WORDS.length) {
+      pool = WORDS;
+    }
+    if (!pool || !pool.length) return 'HAPPY';
+    return String(pool[dayIndex() % pool.length]).toUpperCase();
+  }
+
+  function load() {
+    try {
+      const s = JSON.parse(localStorage.getItem(STORE_KEY));
+      if (s && typeof s === 'object') return s;
+    } catch (e) {}
+    return { lastDate: null, dayStreak: 0, totalDays: 0, solvedToday: false, lastResult: null };
+  }
+  function save(s) { try { localStorage.setItem(STORE_KEY, JSON.stringify(s)); } catch (e) {} }
+
+  // Has today's word already been solved (so we can greet returning players)?
+  function solvedToday() {
+    const s = load();
+    return s.lastDate === todayKey() && s.solvedToday;
+  }
+
+  // Record a solve, advancing the gentle visit streak.
+  function recordSolve(tries) {
+    const s = load();
+    const key = todayKey();
+    if (s.lastDate !== key) {
+      // New calendar day. Was yesterday the previous visit? Then continue streak.
+      const y = new Date(); y.setDate(y.getDate() - 1);
+      const yKey = y.getFullYear() + '-' + String(y.getMonth() + 1).padStart(2, '0') + '-' + String(y.getDate()).padStart(2, '0');
+      s.dayStreak = (s.lastDate === yKey) ? (s.dayStreak + 1) : 1;
+      s.totalDays = (s.totalDays || 0) + 1;
+      s.lastDate = key;
+    }
+    s.solvedToday = true;
+    s.lastResult = { tries: tries, date: key };
+    save(s);
+    return s;
+  }
+
+  return {
+    THEMES: THEMES,
+    todayKey: todayKey,
+    dayIndex: dayIndex,
+    theme: theme,
+    pickWord: pickWord,
+    load: load,
+    solvedToday: solvedToday,
+    recordSolve: recordSolve
+  };
+})();
 // Words a previous guess validated via the dictionary API — accept without
 // hitting the network again this session.
 let SESSION_API_ACCEPTED = new Set();
@@ -2733,12 +2974,119 @@ function initSetup() {
   });
 
   document.getElementById('playBtn').addEventListener('click', () => {
+    dailyMode = false; // leaving Today's Word for a normal free-play game
     localStorage.setItem('kiddiewordle_prefs', JSON.stringify({ len: wordLength, lang: language, game: gameType }));
     document.getElementById('setupScreen').classList.add('hidden');
     showGameUI();
     startGame(false);
   });
+
+  // --- Daily Word entry ---
+  refreshDailyCta();
+  const dailyCta = document.getElementById('dailyCta');
+  if (dailyCta) {
+    dailyCta.addEventListener('click', startDaily);
+  }
 }
+
+// Reflect today's theme + already-solved state on the setup CTA.
+function refreshDailyCta() {
+  const cta = document.getElementById('dailyCta');
+  if (!cta) return;
+  const t = KW_DAILY.theme();
+  const emojiEl = document.getElementById('dailyCtaEmoji');
+  const subEl = document.getElementById('dailyCtaSub');
+  if (emojiEl) emojiEl.innerHTML = t.emoji;
+  if (KW_DAILY.solvedToday()) {
+    cta.classList.add('done');
+    if (subEl) subEl.textContent = "Done for today ✓ · theme: " + t.name;
+  } else {
+    cta.classList.remove('done');
+    if (subEl) subEl.textContent = "One gentle word a day · theme: " + t.name;
+  }
+}
+
+// Start (or revisit) Today's Word. Locks to Classic 5-letter wordle.
+function startDaily() {
+  dailyMode = true;
+  gameType = 'wordle';
+  wordLength = 5;
+  language = 'en';
+  document.getElementById('setupScreen').classList.add('hidden');
+  showGameUI();
+  startGame(false);
+  renderDailyBanner();
+  // If the child already solved today, gently celebrate again right away.
+  if (KW_DAILY.solvedToday()) {
+    const r = KW_DAILY.load().lastResult;
+    setTimeout(() => showDailyReflection(r && r.tries ? r.tries : null, true), 400);
+  }
+}
+
+// Fill + show the theme banner during daily play.
+function renderDailyBanner() {
+  const banner = document.getElementById('dailyBanner');
+  if (!banner) return;
+  const t = KW_DAILY.theme();
+  banner.innerHTML = t.emoji + " <strong>Today’s Word</strong> &middot; Theme: <span class=\"dt-name\">" + t.name + "</span> &mdash; " + t.desc;
+  banner.style.display = '';
+}
+
+// Gentle reflective card after solving the daily word.
+function showDailyReflection(tries, revisit) {
+  const t = KW_DAILY.theme();
+  const s = KW_DAILY.load();
+  const emojiEl = document.getElementById('drEmoji');
+  const wordEl = document.getElementById('drWord');
+  const themeEl = document.getElementById('drTheme');
+  const promptEl = document.getElementById('drPrompt');
+  const streakEl = document.getElementById('drStreak');
+  if (emojiEl) emojiEl.innerHTML = t.emoji;
+  if (wordEl) wordEl.textContent = KW_DAILY.pickWord();
+  if (themeEl) themeEl.innerHTML = "Today’s theme: <strong>" + t.name + "</strong> &middot; " + t.desc;
+  if (promptEl) promptEl.textContent = t.reflect;
+  if (streakEl) {
+    const days = s.dayStreak || 1;
+    const total = s.totalDays || 1;
+    let msg = revisit
+      ? "You already played today — come back tomorrow for a new word! \u{1F331}"
+      : (days > 1
+          ? "You’ve played <span class=\"dr-num\">" + days + "</span> days in a row! \u{1F331}"
+          : "Great start — come back tomorrow to grow your streak! \u{1F331}");
+    if (total > 1 && !revisit) msg += " <br><span style=\"font-size:12px;color:#90A4AE;\">" + total + " daily words solved in all.</span>";
+    streakEl.innerHTML = msg;
+  }
+  refreshDailyCta();
+  if (typeof showKwModal === 'function') showKwModal('dailyReflectModal');
+  else document.getElementById('dailyReflectModal').classList.add('show');
+}
+
+// Daily reflection card buttons.
+(function wireDailyReflectButtons() {
+  function bind() {
+    const closeBtn = document.getElementById('drCloseBtn');
+    const shareBtn = document.getElementById('drShareBtn');
+    if (closeBtn) closeBtn.addEventListener('click', () => closeKwModal('dailyReflectModal'));
+    if (shareBtn) shareBtn.addEventListener('click', () => {
+      const t = KW_DAILY.theme();
+      const s = KW_DAILY.load();
+      const tries = (s.lastResult && s.lastResult.tries) ? s.lastResult.tries : '?';
+      const text = "KiddieWordle \u{1F305} Today’s Word — " + KW_DAILY.todayKey() +
+        "\nTheme: " + t.name + " " + t.emoji +
+        "\nSolved in " + tries + "/" + MAX_GUESSES +
+        "\n\nA gentle word a day at kiddiewordle.com";
+      if (navigator.share) {
+        navigator.share({ text: text }).catch(() => {});
+      } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(() => showToast('Copied!')).catch(() => showToast('Could not copy'));
+      } else {
+        showToast('Share not supported');
+      }
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind);
+  else bind();
+})();
 
 function showGameUI() {
   document.getElementById('gameHeader').style.display = '';
@@ -2750,6 +3098,10 @@ function showGameUI() {
     document.getElementById('pretextLen').textContent = wordLength + '-letter';
     pre.style.display = '';
   }
+  // Daily theme banner: only shown in Today's Word mode (renderDailyBanner
+  // re-shows it). Default to hidden so normal free-play games never show it.
+  const dailyB = document.getElementById('dailyBanner');
+  if (dailyB && !dailyMode) dailyB.style.display = 'none';
   document.body.classList.add('show-rails');
   document.getElementById('boardContainer').style.display = '';
   document.getElementById('keyboard').style.display = '';
@@ -2900,6 +3252,13 @@ async function isDictionaryWord(word) {
 }
 
 function getRandomWord() {
+  // Daily mode: serve the deterministic word of the day instead of a random one.
+  if (dailyMode) {
+    const daily = KW_DAILY.pickWord();
+    // Make sure the daily word is a legal guess in the active list so the game
+    // accepts it; if WORDS doesn't contain it (length mismatch etc.), fall back.
+    if (daily && daily.length === wordLength) return daily;
+  }
   return WORDS[Math.floor(Math.random() * WORDS.length)];
 }
 
@@ -3149,7 +3508,12 @@ async function submitGuess() {
       launchConfetti();
       turtleDance();
       updateStats(true, currentRow);
-      setTimeout(() => showStatsModal(), 2200);
+      if (dailyMode) {
+        KW_DAILY.recordSolve(currentRow);
+        setTimeout(() => showDailyReflection(currentRow), 2200);
+      } else {
+        setTimeout(() => showStatsModal(), 2200);
+      }
     } else if (currentRow >= MAX_GUESSES) {
       gameOver = true;
       KW_AI.encouragement('loss', { target: targetWord })
