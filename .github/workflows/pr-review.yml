@@ -1,0 +1,88 @@
+name: KiddieWordle PR Review
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch: {}
+
+jobs:
+  review-js:
+    name: "Stage 1 — JavaScript syntax"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Check JS syntax
+        run: |
+          FAIL=0
+          for f in $(find . -name "*.js" -not -path "./.git/*" -not -path "./node_modules/*"); do
+            node --check "$f" && echo "OK: $f" || { echo "FAIL: $f"; FAIL=1; }
+          done
+          [ $FAIL -eq 0 ] && echo "All JS files syntax-clean" || exit 1
+
+  review-html:
+    name: "Stage 2 — HTML validation"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Validate HTML files
+        run: |
+          python3 - <<'PYEOF'
+          import html.parser, glob, sys
+          class Checker(html.parser.HTMLParser):
+              pass
+          files = glob.glob("**/*.html", recursive=True)
+          ok = True
+          for path in files:
+              if not open(path, encoding="utf-8", errors="ignore").read().strip():
+                  continue
+              try:
+                  Checker().feed(open(path, encoding="utf-8", errors="ignore").read())
+                  print(f"OK: {path}")
+              except Exception as e:
+                  print(f"FAIL: {path}: {e}")
+                  ok = False
+          if not ok:
+              sys.exit(1)
+          print(f"Checked {len(files)} HTML file(s)")
+          PYEOF
+
+  review-summary:
+    name: "Stage 3 — PR review summary"
+    runs-on: ubuntu-latest
+    needs: [review-js, review-html]
+    if: always() && github.event_name == 'pull_request'
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Post summary comment
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUM: ${{ github.event.pull_request.number }}
+          R1: ${{ needs.review-js.result }}
+          R2: ${{ needs.review-html.result }}
+        run: |
+          icon() { [ "$1" = "success" ] && echo "checkmark" || [ "$1" = "skipped" ] && echo "skip" || echo "x"; }
+          ALL_PASS="true"
+          for r in "$R1" "$R2"; do [ "$r" != "success" ] && ALL_PASS="false"; done
+          [ "$ALL_PASS" = "true" ] && STATUS="**All checks passed. Ready to merge.**" || STATUS="**Checks failed — review logs above.**"
+
+          cat > /tmp/summary.md <<EOF
+          ## KiddieWordle PR Review
+
+          | Stage | Check | Result |
+          |---|---|---|
+          | 1 | JavaScript syntax | \`$R1\` |
+          | 2 | HTML validation | \`$R2\` |
+
+          $STATUS
+
+          > _[View run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})_
+          EOF
+
+          gh pr comment "$PR_NUM" --repo "${{ github.repository }}" --body-file /tmp/summary.md
